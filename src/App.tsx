@@ -1,9 +1,10 @@
 import './App.css';
+import ColorfulHex from './components/ColorfulHex';
 
 function App() {
   return (
     <div className="bg">
-      <div className="hex-bg" />
+      <ColorfulHex />
     </div>
   );
 }

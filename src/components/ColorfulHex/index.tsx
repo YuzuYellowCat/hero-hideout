@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, createRef, useState, MouseEventHandler, useMemo } from "react"
+import React, { useCallback, useEffect, createRef, useState, useMemo } from "react"
 import "./index.css"
 
 type FadePoint = {

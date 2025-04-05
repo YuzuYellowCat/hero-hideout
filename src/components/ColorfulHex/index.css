@@ -2,5 +2,4 @@
     mask-image: url(../../images/test.svg);
     background: radial-gradient(#1e1e1e, #000);
     overscroll-behavior: contain;
-  }
-  
+}

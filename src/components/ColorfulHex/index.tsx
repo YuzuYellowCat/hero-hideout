@@ -10,7 +10,7 @@ import "./index.css";
 type FadePoint = {
     x: number;
     y: number;
-    getColor: (opacity: number) => string;
+    colors: [Color, ...Color[]];
     duration: number;
     frame: number;
     speed: number;
@@ -19,6 +19,12 @@ type FadePoint = {
 type CanvasSize = {
     width: number;
     height: number;
+};
+
+type Color = {
+    red: number;
+    green: number;
+    blue: number;
 };
 
 const ColorfulHex: React.FC = () => {
@@ -30,14 +36,57 @@ const ColorfulHex: React.FC = () => {
         height: window.innerHeight,
     });
 
+    const _colorDiffEq = useCallback(
+        (beforeColor: number, afterColor: number, pctBetween: number) => {
+            return (
+                beforeColor +
+                Math.floor((afterColor - beforeColor) * pctBetween)
+            );
+        },
+        []
+    );
+
+    const _getCurrentColor = useCallback(
+        (pctThrough: number, colors: Color[]) => {
+            const indexLocation = (colors.length - 1) * pctThrough;
+            const beforeColor = colors[Math.floor(indexLocation)];
+            const afterColor = colors[Math.ceil(indexLocation)];
+            if (beforeColor === afterColor) {
+                return beforeColor;
+            }
+            const pctBetween = indexLocation - Math.floor(indexLocation);
+            return {
+                red: _colorDiffEq(beforeColor.red, afterColor.red, pctBetween),
+                green: _colorDiffEq(
+                    beforeColor.green,
+                    afterColor.green,
+                    pctBetween
+                ),
+                blue: _colorDiffEq(
+                    beforeColor.blue,
+                    afterColor.blue,
+                    pctBetween
+                ),
+            };
+        },
+        [_colorDiffEq]
+    );
+
     const draw = useCallback(() => {
         if (!context) {
             return;
         }
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-        for (const point of points) {
-            const opacity = 1 - Math.min(point.frame / point.duration, 1);
-            context.fillStyle = point.getColor(opacity);
+        // Copy the points array for looping so we can remove points
+        for (const point of Array.from(points)) {
+            const pctThrough = point.frame / point.duration;
+            const opacity = 1 - Math.min(pctThrough, 1);
+            if (!opacity) {
+                points.splice(points.indexOf(point), 1);
+                continue;
+            }
+            const color = _getCurrentColor(pctThrough, point.colors);
+            context.fillStyle = `rgba(${color.red}, ${color.green}, ${color.blue}, ${opacity})`;
             context.beginPath();
             context.arc(
                 point.x,
@@ -50,7 +99,7 @@ const ColorfulHex: React.FC = () => {
             context.fill();
             point.frame++;
         }
-    }, [context, points]);
+    }, [context, points, _getCurrentColor]);
 
     const onMouseMove = useCallback(
         (event: MouseEvent) => {
@@ -58,7 +107,11 @@ const ColorfulHex: React.FC = () => {
                 x: event.clientX,
                 y: event.clientY,
                 frame: 0,
-                getColor: (opacity) => `rgba(0, 120, 120, ${opacity})`,
+                // Yellow -> Teal
+                colors: [
+                    { red: 255, green: 255, blue: 0 },
+                    { red: 0, green: 120, blue: 120 },
+                ],
                 duration: 50,
                 speed: 1,
             });
@@ -72,7 +125,12 @@ const ColorfulHex: React.FC = () => {
                 x: event.clientX,
                 y: event.clientY,
                 frame: 0,
-                getColor: (opacity) => `rgba(0, 255, 255, ${opacity})`,
+                // White -> Yellow -> Cyan
+                colors: [
+                    { red: 255, green: 255, blue: 225 },
+                    { red: 255, green: 255, blue: 0 },
+                    { red: 0, green: 255, blue: 255 },
+                ],
                 duration: 70,
                 speed: 2,
             });

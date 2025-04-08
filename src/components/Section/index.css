@@ -1,0 +1,9 @@
+.section {
+    background: #000a;
+    width: 100%;
+    height: fit-content;
+    max-width: 800px;
+    color: #ffe76a;
+    padding: 16px;
+    border: 1px solid #1c85a5aa;
+}

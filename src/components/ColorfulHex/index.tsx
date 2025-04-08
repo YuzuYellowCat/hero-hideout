@@ -109,8 +109,8 @@ const ColorfulHex: React.FC = () => {
                 frame: 0,
                 // Yellow -> Teal
                 colors: [
-                    { red: 255, green: 255, blue: 0 },
-                    { red: 0, green: 120, blue: 120 },
+                    { red: 255, green: 231, blue: 106 },
+                    { red: 28, green: 130, blue: 165 },
                 ],
                 duration: 50,
                 speed: 1,
@@ -127,9 +127,10 @@ const ColorfulHex: React.FC = () => {
                 frame: 0,
                 // White -> Yellow -> Cyan
                 colors: [
-                    { red: 255, green: 255, blue: 225 },
-                    { red: 255, green: 255, blue: 0 },
-                    { red: 0, green: 255, blue: 255 },
+                    { red: 255, green: 244, blue: 183 },
+                    { red: 255, green: 244, blue: 183 },
+                    { red: 255, green: 231, blue: 106 },
+                    { red: 255, green: 190, blue: 38 },
                 ],
                 duration: 70,
                 speed: 2,

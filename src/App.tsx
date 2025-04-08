@@ -1,14 +1,12 @@
 import "./App.css";
-import ColorfulHex from "./components/ColorfulHex";
+import ColorfulHex from "components/ColorfulHex";
+import Header from "components/Header";
 
 function App() {
     return (
         <div className="site">
             <div className="contents">
-                <div className="section">
-                    <h1>YuzuCat</h1>
-                    <h3>beats up TurboWolf</h3>
-                </div>
+                <Header />
             </div>
             <div className="bg">
                 <ColorfulHex />

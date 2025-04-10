@@ -1,25 +1,47 @@
 import React from "react";
 import "./index.css";
 import Section from "components/Section";
+import TitleStripe from "components/TitleStripe";
+import { useNavigate } from "react-router";
 
-const Header: React.FC = () => {
-    return (
-        <Section>
-            <div className="title-container">
-                <div className="title-text">
-                    <span className="header-title">YuzuCat</span>
-                    <span className="header-flourish"> </span>
-                    <div className="stripe-edge" />
-                </div>
-                <div className="stripe-1">
-                    <div className="stripe-body" />
-                    <div className="stripe-edge" />
-                </div>
-                <div className="stripe-2">
-                    <div className="stripe-body" />
-                    <div className="stripe-edge" />
-                </div>
+type HeaderProps = {
+    borderColor: string;
+    selected: string;
+};
+
+const HeaderLinks = {
+    Test: "/",
+    About: "/about",
+};
+
+const Header: React.FC<HeaderProps> = ({ borderColor, selected }) => {
+    const navigate = useNavigate();
+
+    const links = Object.entries(HeaderLinks).map(([key, value]) => {
+        const isSelected = key === selected;
+        const style = isSelected
+            ? {
+                  backgroundColor: borderColor,
+              }
+            : {
+                  color: borderColor,
+              };
+        return (
+            <div
+                style={style}
+                className={`link${isSelected ? " selected" : ""}`}
+                key={key}
+                onClick={() => navigate(value)}
+            >
+                {key}
             </div>
+        );
+    });
+
+    return (
+        <Section color={borderColor}>
+            <TitleStripe>YuzuCat</TitleStripe>
+            <div className="links">{links}</div>
         </Section>
     );
 };

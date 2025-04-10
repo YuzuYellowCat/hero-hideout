@@ -1,0 +1,72 @@
+.header-title,
+.header-flourish {
+    color: black;
+    text-align: center;
+    font-size: 40px;
+    margin: 0;
+}
+
+.stripe-1 {
+    position: absolute;
+    width: 250px;
+    height: 52px;
+    background-color: #ffbe26;
+    z-index: 2;
+}
+
+.stripe-1 .stripe-edge {
+    border-left-color: #ffbe26;
+    left: 250px;
+}
+
+.stripe-2 {
+    position: absolute;
+    width: 280px;
+    height: 52px;
+    background-color: #fff4b7;
+    z-index: 1;
+}
+
+.stripe-2 .stripe-edge {
+    border-left-color: #fff4b7;
+    left: 280px;
+}
+
+.stripe-edge {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-top: 52px solid transparent;
+    border-left-width: 24px;
+    border-left-style: solid;
+}
+
+.header-flourish {
+    font-weight: 300;
+}
+
+.header-title {
+    position: absolute;
+    font-weight: 900;
+    margin-left: -16px;
+    padding-left: 16px;
+}
+
+.title-container {
+    display: flex;
+}
+
+.title-text {
+    z-index: 3;
+    display: flex;
+    background-color: #ffe76a;
+    width: 220px;
+    height: 52px;
+    margin-left: -16px;
+    padding-left: 16px;
+}
+
+.title-text .stripe-edge {
+    border-left-color: #ffe76a;
+    left: 220px;
+}

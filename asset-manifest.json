@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/hero-hideout/static/css/main.c2ab2c3e.css",
-    "main.js": "/hero-hideout/static/js/main.b27ea660.js",
-    "static/js/453.e778c533.chunk.js": "/hero-hideout/static/js/453.e778c533.chunk.js",
-    "index.html": "/hero-hideout/index.html",
-    "static/media/tiles.svg": "/hero-hideout/static/media/tiles.1a5cf9a5ab698900d9ff.svg",
-    "static/media/paw.svg": "/hero-hideout/static/media/paw.3f39205a6972f864d8389d5039a0a82d.svg",
-    "main.c2ab2c3e.css.map": "/hero-hideout/static/css/main.c2ab2c3e.css.map",
-    "main.b27ea660.js.map": "/hero-hideout/static/js/main.b27ea660.js.map",
-    "453.e778c533.chunk.js.map": "/hero-hideout/static/js/453.e778c533.chunk.js.map"
+    "main.css": "/yuzucat.com/static/css/main.c16c4690.css",
+    "main.js": "/yuzucat.com/static/js/main.2d2de94e.js",
+    "static/js/453.e778c533.chunk.js": "/yuzucat.com/static/js/453.e778c533.chunk.js",
+    "index.html": "/yuzucat.com/index.html",
+    "static/media/tiles.svg": "/yuzucat.com/static/media/tiles.1a5cf9a5ab698900d9ff.svg",
+    "static/media/paw.svg": "/yuzucat.com/static/media/paw.3f39205a6972f864d8389d5039a0a82d.svg",
+    "main.c16c4690.css.map": "/yuzucat.com/static/css/main.c16c4690.css.map",
+    "main.2d2de94e.js.map": "/yuzucat.com/static/js/main.2d2de94e.js.map",
+    "453.e778c533.chunk.js.map": "/yuzucat.com/static/js/453.e778c533.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c2ab2c3e.css",
-    "static/js/main.b27ea660.js"
+    "static/css/main.c16c4690.css",
+    "static/js/main.2d2de94e.js"
   ]
 }

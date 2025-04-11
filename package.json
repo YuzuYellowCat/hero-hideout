@@ -1,7 +1,7 @@
 {
     "name": "hero-hideout",
     "version": "0.1.0",
-    "homepage": "https://yuzuyellowcat.github.io/hero-hideout",
+    "homepage": "http://yuzucat.com/",
     "private": true,
     "dependencies": {
         "@testing-library/dom": "^10.4.0",

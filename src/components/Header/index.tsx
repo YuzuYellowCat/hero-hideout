@@ -10,7 +10,7 @@ type HeaderProps = {
 };
 
 const HeaderLinks = {
-    Test: "/",
+    Home: "/",
     About: "/about",
 };
 
@@ -19,21 +19,18 @@ const Header: React.FC<HeaderProps> = ({ borderColor, selected }) => {
 
     const links = Object.entries(HeaderLinks).map(([key, value]) => {
         const isSelected = key === selected;
-        const style = isSelected
-            ? {
-                  backgroundColor: borderColor,
-              }
-            : {
-                  color: borderColor,
-              };
         return (
             <div
-                style={style}
+                style={isSelected ? {} : { color: borderColor }}
                 className={`link${isSelected ? " selected" : ""}`}
                 key={key}
                 onClick={() => navigate(value)}
             >
-                {key}
+                <span className="link-text">{key}</span>
+                <div
+                    className="link-background"
+                    style={isSelected ? { backgroundColor: borderColor } : {}}
+                />
             </div>
         );
     });

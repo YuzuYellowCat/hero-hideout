@@ -1,17 +1,54 @@
 .links {
     display: flex;
+    justify-content: left;
+    align-items: center;
     padding-top: 16px;
     gap: 16px;
     font-size: 20px;
     font-weight: 700;
+    margin-bottom: -16px;
+    font-family: "Chakra Petch", sans-serif;
 }
 
 .link {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+}
+
+.link-text {
+    z-index: 2;
     padding: 4px;
+}
+
+.link:not(.selected) .link-text {
     cursor: pointer;
+}
+
+.link:hover:not(.selected) .link-background {
+    transition: 0.2s;
+    bottom: 0;
+}
+
+.link:hover:not(.selected) .link-text {
+    transition: 0.2s;
+    color: black;
+}
+
+.link-background {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    background-color: white;
+}
+
+.link:not(.selected) .link-background {
+    transition: 0.2s;
+    bottom: -100%;
 }
 
 .link.selected {
     color: black;
-    background-color: white;
 }

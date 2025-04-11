@@ -1,6 +1,7 @@
 import React from "react";
 import type { PropsWithChildren } from "react";
 import "./index.css";
+import { ReactComponent as Paw } from "images/paw.svg";
 
 type SectionProps = {
     color: string;
@@ -21,10 +22,12 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
         >
             {title && (
                 <span style={{ color }} className="section-title">
-                    {title} › › ›
+                    {title}
+                    <span className="title-flourish"> › › ›</span>
                 </span>
             )}
-            {children}
+            <Paw className="corner-paw" style={{ stroke: color }} />
+            <div className="section-content">{children}</div>
         </div>
     );
 };

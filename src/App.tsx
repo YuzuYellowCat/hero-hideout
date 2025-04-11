@@ -1,13 +1,13 @@
 import "./App.css";
 import ColorfulHex from "components/ColorfulHex";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import Test from "pages/Test";
+import Home from "pages/Home";
 import About from "pages/About";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Test />,
+        element: <Home />,
     },
     {
         path: "/about",

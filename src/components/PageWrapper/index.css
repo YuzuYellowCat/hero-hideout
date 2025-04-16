@@ -9,3 +9,8 @@
     overflow-y: scroll;
     flex-direction: column;
 }
+
+.page-contents {
+    display: flex;
+    flex-direction: column;
+}

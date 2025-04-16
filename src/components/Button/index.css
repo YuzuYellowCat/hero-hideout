@@ -1,0 +1,27 @@
+.button {
+    all: auto;
+    cursor: pointer;
+    display: flex;
+    padding: 8px;
+    border-radius: 4px;
+    font-family: "Chakra Petch", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    background-color: transparent;
+    border: 1px solid;
+}
+
+.button:hover,
+.button:focus-visible {
+    background-color: transparent !important;
+    color: white !important;
+    transition: 0.2s;
+}
+
+.button.button-quiet:hover,
+.button.button-quiet:focus-visible {
+    background-color: white !important;
+    color: black !important;
+    transition: 0.2s;
+}

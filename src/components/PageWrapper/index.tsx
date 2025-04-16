@@ -7,18 +7,27 @@ import Section from "components/Section";
 type PageWrapperProps = {
     color: string;
     title: string;
+    alignItems?: "start" | "end" | "center" | "inherit";
 };
 
 const PageWrapper: React.FC<PropsWithChildren<PageWrapperProps>> = ({
     children,
     color,
     title,
+    alignItems = "inherit",
 }) => {
     return (
         <div className="page">
             <Header selected={title} borderColor={color} />
             <Section color={color} title={title}>
-                {children}
+                <div
+                    className="page-contents"
+                    style={{
+                        alignItems,
+                    }}
+                >
+                    {children}
+                </div>
             </Section>
         </div>
     );

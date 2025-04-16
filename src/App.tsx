@@ -3,6 +3,7 @@ import ColorfulHex from "components/ColorfulHex";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "pages/Home";
 import About from "pages/About";
+import NotFound from "pages/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
     {
         path: "/about",
         element: <About />,
+    },
+    {
+        path: "*",
+        element: <NotFound />,
     },
 ]);
 

@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ borderColor, selected }) => {
     const links = Object.entries(HeaderLinks).map(([key, value]) => {
         const isSelected = key === selected;
         return (
-            <div
+            <button
                 style={isSelected ? {} : { color: borderColor }}
                 className={`link${isSelected ? " selected" : ""}`}
                 key={key}
@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ borderColor, selected }) => {
                     className="link-background"
                     style={isSelected ? { backgroundColor: borderColor } : {}}
                 />
-            </div>
+            </button>
         );
     });
 

@@ -7,13 +7,18 @@
     font-size: 20px;
     font-weight: 700;
     margin-bottom: -16px;
-    font-family: "Chakra Petch", sans-serif;
 }
 
 .link {
     position: relative;
     display: flex;
     overflow: hidden;
+    background-color: transparent;
+    border: none;
+    font-family: "Chakra Petch", sans-serif;
+    gap: 16px;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .link-text {
@@ -25,12 +30,14 @@
     cursor: pointer;
 }
 
-.link:hover:not(.selected) .link-background {
+.link:hover:not(.selected) .link-background,
+.link:focus-visible:not(.selected) .link-background {
     transition: 0.2s;
     bottom: 0;
 }
 
-.link:hover:not(.selected) .link-text {
+.link:hover:not(.selected) .link-text,
+.link:focus-visible:not(.selected) .link-text {
     transition: 0.2s;
     color: black;
 }

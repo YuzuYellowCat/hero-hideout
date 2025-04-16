@@ -4,11 +4,11 @@ import Home from "pages/Home";
 import About from "pages/About";
 import NotFound from "pages/NotFound";
 
-import { Routes, Route, HashRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 const App: React.FC = () => {
     return (
-        <HashRouter>
+        <BrowserRouter>
             <div className="site">
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -19,7 +19,7 @@ const App: React.FC = () => {
                     <ColorfulHex />
                 </div>
             </div>
-        </HashRouter>
+        </BrowserRouter>
     );
 };
 

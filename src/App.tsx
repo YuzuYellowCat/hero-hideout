@@ -1,33 +1,25 @@
 import "./App.css";
 import ColorfulHex from "components/ColorfulHex";
-import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "pages/Home";
 import About from "pages/About";
 import NotFound from "pages/NotFound";
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />,
-    },
-    {
-        path: "/about",
-        element: <About />,
-    },
-    {
-        path: "*",
-        element: <NotFound />,
-    },
-]);
+import { Routes, Route, HashRouter } from "react-router-dom";
 
 const App: React.FC = () => {
     return (
-        <div className="site">
-            <RouterProvider router={router} />
-            <div className="bg">
-                <ColorfulHex />
+        <HashRouter>
+            <div className="site">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+                <div className="bg">
+                    <ColorfulHex />
+                </div>
             </div>
-        </div>
+        </HashRouter>
     );
 };
 

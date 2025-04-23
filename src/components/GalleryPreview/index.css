@@ -1,0 +1,21 @@
+.gallery-preview {
+    padding: 16px;
+    border: 1px solid white;
+    background-color: #0008;
+    margin-top: 16px;
+}
+
+.gallery-preview-title {
+    font-family: "Chakra Petch", sans-serif;
+    font-size: 24px;
+    font-style: italic;
+    color: white;
+    opacity: 1;
+    margin: 0;
+    padding-bottom: 8px;
+}
+
+.gallery-preview-cards {
+    display: flex;
+    gap: 16px;
+}

@@ -5,6 +5,7 @@ import About from "pages/About";
 import NotFound from "pages/NotFound";
 
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import Galleries from "pages/Galleries";
 
 const App: React.FC = () => {
     return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/galleries" element={<Galleries />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <div className="bg">

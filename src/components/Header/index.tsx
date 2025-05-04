@@ -3,15 +3,11 @@ import "./index.css";
 import Section from "components/Section";
 import TitleStripe from "components/TitleStripe";
 import { useNavigate } from "react-router";
+import { HeaderLinks } from "appConstants";
 
 type HeaderProps = {
     borderColor: string;
     selected: string;
-};
-
-const HeaderLinks = {
-    Home: "/",
-    About: "/about",
 };
 
 const Header: React.FC<HeaderProps> = ({ borderColor, selected }) => {

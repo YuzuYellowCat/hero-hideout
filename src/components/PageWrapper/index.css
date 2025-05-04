@@ -1,12 +1,12 @@
 .page {
     width: calc(100% - 48px);
-    height: calc(100% - 48px);
+    height: fit-content;
+    min-height: calc(100% - 48px);
     position: absolute;
     display: flex;
     align-items: center;
     margin: 24px;
     gap: 24px;
-    overflow-y: scroll;
     flex-direction: column;
 }
 

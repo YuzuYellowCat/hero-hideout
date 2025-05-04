@@ -1,18 +1,37 @@
 import React from "react";
 import GalleryPreviewCard from "components/GalleryPreviewCard";
 import "./index.css";
+import { GalleryID, Galleries } from "appConstants";
+import { useNavigate } from "react-router";
 
 type GalleryPreviewProps = {
-    title: string;
+    id: GalleryID;
 };
 
-const GalleryPreview: React.FC<GalleryPreviewProps> = ({ title }) => {
+const GalleryPreview: React.FC<GalleryPreviewProps> = ({ id }) => {
+    const navigate = useNavigate();
+    const galleryInfo = Galleries[id];
     return (
         <div className="gallery-preview">
-            <h3 className="gallery-preview-title">{title}</h3>
+            <div
+                className="gallery-preview-title"
+                onClick={() => navigate(`/galleries/${id}`)}
+            >
+                <h3 className="gallery-preview-title-text">
+                    {galleryInfo.title}
+                </h3>
+                <span className="gallery-preview-title-flourish">›</span>
+                <div className="gallery-preview-title-bg" />
+            </div>
             <div className="gallery-preview-cards">
-                <GalleryPreviewCard title="DawnWhisker Going to LVFC" />
-                <GalleryPreviewCard title="DawnWhisker Cool" />
+                <GalleryPreviewCard
+                    title="Test Img 1"
+                    src={galleryInfo.placeholder}
+                />
+                <GalleryPreviewCard
+                    title="Test Img 2"
+                    src={galleryInfo.placeholder}
+                />
             </div>
         </div>
     );

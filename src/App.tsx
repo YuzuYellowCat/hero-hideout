@@ -6,6 +6,7 @@ import NotFound from "pages/NotFound";
 
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Galleries from "pages/Galleries";
+import GalleryPage from "pages/GalleryPage";
 
 const App: React.FC = () => {
     return (
@@ -15,6 +16,10 @@ const App: React.FC = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/galleries" element={<Galleries />} />
+                    <Route
+                        path="/galleries/:gallery"
+                        element={<GalleryPage />}
+                    />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <div className="bg">

@@ -1,9 +1,13 @@
+import DawnWhiskerRefContents from "ref-contents/DawnWhisker";
+import MercurialRefContents from "ref-contents/Mercurial";
+
 /**
  * Header
  */
 export const HeaderLinks = {
     Home: "/",
     About: "/about",
+    Characters: "/characters",
 };
 
 /**
@@ -34,3 +38,32 @@ export const Galleries: GalleriesType = {
 };
 
 export type GalleryID = keyof typeof Galleries;
+
+/**
+ * Character Types & Constants
+ */
+
+export type CharacterInfo = {
+    name: string;
+    RefContents: React.ComponentType;
+    color: string;
+};
+
+type CharactersType = {
+    [key: string]: CharacterInfo;
+};
+
+export const Characters: CharactersType = {
+    dawnwhisker: {
+        name: "DawnWhisker",
+        RefContents: DawnWhiskerRefContents,
+        color: "#1b86a7",
+    },
+    mercurial: {
+        name: "Mercurial",
+        RefContents: MercurialRefContents,
+        color: "#ba0203",
+    },
+};
+
+export type CharacterID = keyof typeof Characters;

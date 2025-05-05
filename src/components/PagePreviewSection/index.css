@@ -1,11 +1,11 @@
-.gallery-preview {
+.page-preview {
     padding: 16px;
-    border: 1px solid white;
+    border: 1px solid transparent;
     background-color: #0008;
     margin-top: 16px;
 }
 
-.gallery-preview-title {
+.page-preview-title {
     display: flex;
     position: relative;
     width: fit-content;
@@ -18,7 +18,7 @@
     align-items: center;
 }
 
-.gallery-preview-title-text {
+.page-preview-title-text {
     color: white;
     cursor: pointer;
     font-style: italic;
@@ -28,7 +28,7 @@
     padding-right: 8px;
 }
 
-.gallery-preview-title .gallery-preview-title-flourish {
+.page-preview-title .page-preview-title-flourish {
     z-index: 1;
     color: white;
     font-size: 32px;
@@ -39,9 +39,8 @@
     padding-right: 16px;
 }
 
-.gallery-preview-title-bg {
+.page-preview-title-bg {
     z-index: 0;
-    background-color: white;
     display: flex;
     position: absolute;
     width: 0%;
@@ -49,18 +48,18 @@
     transition: 0.2s;
 }
 
-.gallery-preview-title:hover .gallery-preview-title-bg {
+.page-preview-title:hover .page-preview-title-bg {
     width: 100%;
     transition: 0.2s;
 }
 
-.gallery-preview-title:hover .gallery-preview-title-text,
-.gallery-preview-title:hover .gallery-preview-title-flourish {
+.page-preview-title:hover .page-preview-title-text,
+.page-preview-title:hover .page-preview-title-flourish {
     color: black;
     transition: 0.2s;
 }
 
-.gallery-preview-cards {
+.page-preview-content {
     display: flex;
     gap: 16px;
 }

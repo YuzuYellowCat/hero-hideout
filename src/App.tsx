@@ -7,6 +7,9 @@ import NotFound from "pages/NotFound";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Galleries from "pages/Galleries";
 import GalleryPage from "pages/GalleryPage";
+import Characters from "pages/Characters";
+import CharacterPage from "pages/CharacterPage";
+import CharacterRef from "pages/CharacterRef";
 
 const App: React.FC = () => {
     return (
@@ -19,6 +22,15 @@ const App: React.FC = () => {
                     <Route
                         path="/galleries/:gallery"
                         element={<GalleryPage />}
+                    />
+                    <Route path="/characters" element={<Characters />} />
+                    <Route
+                        path="/characters/:character"
+                        element={<CharacterPage />}
+                    />
+                    <Route
+                        path="/characters/:character/ref"
+                        element={<CharacterRef />}
                     />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

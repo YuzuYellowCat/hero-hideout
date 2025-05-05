@@ -16,6 +16,8 @@
 }
 
 .ref-contents img {
+    max-height: calc(100vh - 32px);
+    object-fit: scale-down;
     margin: 16px 0px;
 }
 

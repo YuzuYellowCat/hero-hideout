@@ -2,6 +2,7 @@ import React from "react";
 import PageWrapper from "components/PageWrapper";
 import CharacterPreview from "components/CharacterPreview";
 import { Characters as CharacterContent } from "appConstants";
+import "./index.css";
 
 const Characters: React.FC = () => {
     const characterPreviews = Object.keys(CharacterContent).map((galleryId) => {
@@ -9,7 +10,7 @@ const Characters: React.FC = () => {
     });
     return (
         <PageWrapper color="#ebfffe" title="Characters">
-            {characterPreviews}
+            <div className="characters-wrapper">{characterPreviews}</div>
         </PageWrapper>
     );
 };

@@ -64,6 +64,21 @@ export const Characters: CharactersType = {
         RefContents: MercurialRefContents,
         color: "#ba0203",
     },
+    placeholder: {
+        name: "Placeholder",
+        RefContents: DawnWhiskerRefContents,
+        color: "#123456",
+    },
+    placeholder2: {
+        name: "Placeholder",
+        RefContents: DawnWhiskerRefContents,
+        color: "#123456",
+    },
+    placeholder3: {
+        name: "Placeholder",
+        RefContents: DawnWhiskerRefContents,
+        color: "#123456",
+    },
 };
 
 export type CharacterID = keyof typeof Characters;

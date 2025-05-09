@@ -1,5 +1,6 @@
 import RefContentsWrapper from "components/RefContentsWrapper";
 import React from "react";
+import Link from "components/Link";
 
 const DawnWhiskerRefContents: React.FC = () => {
     return (
@@ -11,13 +12,9 @@ const DawnWhiskerRefContents: React.FC = () => {
             />
             <p>
                 Ref drawn by{" "}
-                <a
-                    href="https://bsky.app/profile/imdanuki.bsky.social"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    @imdanuki.bsky.social
-                </a>
+                <Link href="https://bsky.app/profile/imdanuki.bsky.social">
+                    imdanuki
+                </Link>
             </p>
         </RefContentsWrapper>
     );

@@ -43,6 +43,7 @@ const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
                 title={characterInfo.name}
                 navigationPath={`/characters/${id}`}
                 color={characterInfo.color}
+                hasFlourish={false}
             >
                 {thumbnail}
             </PagePreviewSection>

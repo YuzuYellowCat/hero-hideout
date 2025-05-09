@@ -26,7 +26,7 @@ const PagePreviewSection: React.FC<
                 borderColor: color,
             }}
         >
-            <div
+            <button
                 className="page-preview-title"
                 onClick={() => navigate(navigationPath)}
             >
@@ -40,7 +40,7 @@ const PagePreviewSection: React.FC<
                         backgroundColor: color,
                     }}
                 />
-            </div>
+            </button>
             <div className="page-preview-content">{children}</div>
         </div>
     );

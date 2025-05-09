@@ -11,12 +11,16 @@
     position: relative;
     width: fit-content;
     height: fit-content;
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
     margin-bottom: 8px;
     margin-left: -16px;
     font-family: "Chakra Petch", sans-serif;
     font-size: 20px;
     font-weight: 600;
     align-items: center;
+    background: none;
 }
 
 .page-preview-title-text {
@@ -32,8 +36,11 @@
 .page-preview-title .page-preview-title-flourish {
     z-index: 1;
     color: white;
-    font-size: 28px;
+    font-size: 24px;
+    text-align: center;
     line-height: 20px;
+    margin-top: -3px;
+    height: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,11 +56,13 @@
     transition: 0.2s;
 }
 
+.page-preview-title:focus .page-preview-title-bg,
 .page-preview-title:hover .page-preview-title-bg {
     width: 100%;
     transition: 0.2s;
 }
-
+.page-preview-title:focus .page-preview-title-text,
+.page-preview-title:focus .page-preview-title-flourish,
 .page-preview-title:hover .page-preview-title-text,
 .page-preview-title:hover .page-preview-title-flourish {
     color: black;

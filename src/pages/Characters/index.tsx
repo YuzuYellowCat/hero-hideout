@@ -3,14 +3,21 @@ import PageWrapper from "components/PageWrapper";
 import CharacterPreview from "components/CharacterPreview";
 import { Characters as CharacterContent } from "appConstants";
 import "./index.css";
+import Link from "components/Link";
 
 const Characters: React.FC = () => {
     const characterPreviews = Object.keys(CharacterContent).map((galleryId) => {
         return <CharacterPreview id={galleryId} />;
     });
     return (
-        <PageWrapper color="#ebfffe" title="Characters">
+        <PageWrapper color="#ebfffe" title="Characters" alignItems="center">
             <div className="characters-wrapper">{characterPreviews}</div>
+            <p>
+                Icons by{" "}
+                <Link href="https://bsky.app/profile/kiyonescarlet.bsky.social">
+                    KiyoneScarlet
+                </Link>
+            </p>
         </PageWrapper>
     );
 };

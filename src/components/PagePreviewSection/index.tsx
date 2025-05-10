@@ -7,6 +7,7 @@ type PagePreviewSectionProps = {
     navigationPath: string;
     color?: string;
     hasFlourish?: boolean;
+    fullHover?: boolean;
 };
 
 const PagePreviewSection: React.FC<
@@ -16,20 +17,19 @@ const PagePreviewSection: React.FC<
     navigationPath,
     children,
     hasFlourish = true,
+    fullHover = false,
     color = "#fff",
 }) => {
     const navigate = useNavigate();
     return (
-        <div
+        <button
             className="page-preview"
             style={{
                 borderColor: color,
             }}
+            onClick={() => navigate(navigationPath)}
         >
-            <button
-                className="page-preview-title"
-                onClick={() => navigate(navigationPath)}
-            >
+            <div className="page-preview-title">
                 <h3 className="page-preview-title-text">{title}</h3>
                 {hasFlourish && (
                     <span className="page-preview-title-flourish">›</span>
@@ -40,9 +40,17 @@ const PagePreviewSection: React.FC<
                         backgroundColor: color,
                     }}
                 />
-            </button>
+            </div>
             <div className="page-preview-content">{children}</div>
-        </div>
+            <div
+                className="page-preview-bg"
+                style={{
+                    backgroundColor: color,
+                    opacity: 0.25,
+                    display: fullHover ? "flex" : "none",
+                }}
+            />
+        </button>
     );
 };
 

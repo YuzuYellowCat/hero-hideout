@@ -64,6 +64,12 @@ export const Characters: CharactersType = {
         RefContents: MercurialRefContents,
         color: "#ba0203",
     },
+    // For testing the placeholder img
+    // placeholder: {
+    //     name: "Placeholder",
+    //     RefContents: MercurialRefContents,
+    //     color: "#b4db3d",
+    // },
 };
 
 export type CharacterID = keyof typeof Characters;

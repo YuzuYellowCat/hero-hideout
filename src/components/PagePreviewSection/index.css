@@ -1,4 +1,6 @@
 .page-preview {
+    position: relative;
+    cursor: pointer;
     width: 100%;
     padding: 16px;
     border: 1px solid transparent;
@@ -47,31 +49,53 @@
     padding-right: 16px;
 }
 
-.page-preview-title-bg {
+.page-preview-title-bg,
+.page-preview-bg {
     z-index: 0;
     display: flex;
     position: absolute;
     width: 0%;
     height: 100%;
     transition: 0.2s;
+    top: 0;
+    left: 0;
 }
 
-.page-preview-title:focus .page-preview-title-bg,
-.page-preview-title:hover .page-preview-title-bg {
+.page-preview-title-bg {
+    width: 0%;
+    height: 100%;
+}
+
+.page-preview-bg {
+    width: 100%;
+    height: 0%;
+}
+
+.page-preview:focus .page-preview-title-bg,
+.page-preview:hover .page-preview-title-bg {
     width: 100%;
     transition: 0.2s;
 }
-.page-preview-title:focus .page-preview-title-text,
-.page-preview-title:focus .page-preview-title-flourish,
-.page-preview-title:hover .page-preview-title-text,
-.page-preview-title:hover .page-preview-title-flourish {
+
+.page-preview:focus .page-preview-bg,
+.page-preview:hover .page-preview-bg {
+    height: 100%;
+    transition: 0.2s;
+}
+
+.page-preview:focus .page-preview-title-text,
+.page-preview:focus .page-preview-title-flourish,
+.page-preview:hover .page-preview-title-text,
+.page-preview:hover .page-preview-title-flourish {
     color: black;
     transition: 0.2s;
 }
 
 .page-preview-content {
+    position: relative;
     display: flex;
     gap: 16px;
+    z-index: 1;
 }
 
 @media (width <= 900px) {

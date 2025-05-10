@@ -44,6 +44,7 @@ const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
                 navigationPath={`/characters/${id}`}
                 color={characterInfo.color}
                 hasFlourish={false}
+                fullHover
             >
                 {thumbnail}
             </PagePreviewSection>

@@ -1,12 +1,12 @@
 import React from "react";
 import PageWrapper from "components/PageWrapper";
 import CharacterPreview from "components/CharacterPreview";
-import { Characters as CharacterContent } from "appConstants";
+import { MyCharacters } from "appConstants";
 import "./index.css";
 import Link from "components/Link";
 
 const Characters: React.FC = () => {
-    const characterPreviews = Object.keys(CharacterContent).map((galleryId) => {
+    const characterPreviews = Object.keys(MyCharacters).map((galleryId) => {
         return <CharacterPreview id={galleryId} />;
     });
     return (

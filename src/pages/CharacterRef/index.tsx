@@ -1,7 +1,7 @@
 import React from "react";
 import PageWrapper from "components/PageWrapper";
 import { useNavigate, useParams } from "react-router";
-import { Characters } from "appConstants";
+import { MyCharacters } from "appConstants";
 import NotFound from "pages/NotFound";
 import Button from "components/Button";
 
@@ -13,9 +13,9 @@ const CharacterRef: React.FC = () => {
     const params = useParams<CharacterParams>();
     const navigate = useNavigate();
 
-    const characterInfo = params.character && Characters[params.character];
-    if (!characterInfo) {
-        // If this characters isn't found, show 404
+    const characterInfo = params.character && MyCharacters[params.character];
+    if (!characterInfo || !characterInfo.RefContents) {
+        // If this characters isn't found, or it doesn't have a ref, show 404
         return <NotFound />;
     }
 

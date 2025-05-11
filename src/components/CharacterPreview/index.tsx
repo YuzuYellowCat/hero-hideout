@@ -1,11 +1,11 @@
 import React from "react";
-import { CharacterID, CharacterInfo, Characters } from "appConstants";
+import { MyCharacterID, CharacterInfo, MyCharacters } from "appConstants";
 import PagePreviewSection from "components/PagePreviewSection";
 import { ReactComponent as Paw } from "images/paw.svg";
 import "./index.css";
 
 type CharacterPreviewProps = {
-    id: CharacterID;
+    id: MyCharacterID;
 };
 
 const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
@@ -13,7 +13,7 @@ const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
     const [characterInfo, setCharacterInfo] = React.useState<CharacterInfo>();
 
     React.useEffect(() => {
-        setCharacterInfo(Characters[id]);
+        setCharacterInfo(MyCharacters[id]);
         try {
             const characterImg = require(`images/characters/${id}.png`);
             setImageSource(characterImg);

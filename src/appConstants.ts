@@ -1,5 +1,6 @@
 import DawnWhiskerRefContents from "ref-contents/DawnWhisker";
 import MercurialRefContents from "ref-contents/Mercurial";
+import YuzuRefContents from "ref-contents/Yuzu";
 
 /**
  * Header
@@ -45,24 +46,32 @@ export type GalleryID = keyof typeof Galleries;
 
 export type CharacterInfo = {
     name: string;
-    RefContents: React.ComponentType;
     color: string;
 };
 
-type CharactersType = {
-    [key: string]: CharacterInfo;
+export type MyCharacterInfo = CharacterInfo & {
+    RefContents: React.ComponentType;
 };
 
-export const Characters: CharactersType = {
+type MyCharactersType = {
+    [key: string]: MyCharacterInfo;
+};
+
+export const MyCharacters: MyCharactersType = {
+    yuzu: {
+        name: "Yuzu",
+        color: "#ffe76b",
+        RefContents: YuzuRefContents,
+    },
     dawnwhisker: {
         name: "DawnWhisker",
-        RefContents: DawnWhiskerRefContents,
         color: "#1b86a7",
+        RefContents: DawnWhiskerRefContents,
     },
     mercurial: {
         name: "Mercurial",
-        RefContents: MercurialRefContents,
         color: "#ba0203",
+        RefContents: MercurialRefContents,
     },
     // For testing the placeholder img
     // placeholder: {
@@ -72,4 +81,22 @@ export const Characters: CharactersType = {
     // },
 };
 
-export type CharacterID = keyof typeof Characters;
+type GuestCharactersType = {
+    [key: string]: CharacterInfo;
+};
+
+export const GuestCharacters: GuestCharactersType = {
+    turbo_wolf: {
+        name: "Turbo Wolf",
+        color: "#28334a",
+    },
+};
+
+export const AllCharacters = {
+    ...GuestCharacters,
+    ...MyCharacters,
+};
+
+export type MyCharacterID = keyof typeof MyCharacters;
+
+export type AllCharactersID = keyof typeof AllCharacters;

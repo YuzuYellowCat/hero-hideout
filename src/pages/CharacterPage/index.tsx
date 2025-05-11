@@ -1,7 +1,7 @@
 import React from "react";
 import PageWrapper from "components/PageWrapper";
 import { useNavigate, useParams } from "react-router";
-import { Characters } from "appConstants";
+import { MyCharacters } from "appConstants";
 import NotFound from "pages/NotFound";
 import Button from "components/Button";
 
@@ -13,7 +13,7 @@ const CharacterPage: React.FC = () => {
     const params = useParams<CharacterParams>();
     const navigate = useNavigate();
 
-    const characterInfo = params.character && Characters[params.character];
+    const characterInfo = params.character && MyCharacters[params.character];
     if (!characterInfo) {
         // If this gallery isn't found,
         return <NotFound />;

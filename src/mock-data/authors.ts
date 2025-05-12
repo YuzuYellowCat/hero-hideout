@@ -20,6 +20,10 @@ export const CreditList: CreditsType = {
         name: "imdanuki",
         link: "https://bsky.app/profile/imdanuki.bsky.social",
     },
+    aussiekitten: {
+        name: "AussieKitten",
+        link: "https://bsky.app/profile/aussiekitten.com",
+    },
 };
 
 export type CreditID = keyof typeof CreditList;

@@ -15,7 +15,7 @@ const CharacterPage: React.FC = () => {
 
     const characterInfo = params.character && MyCharacters[params.character];
     if (!characterInfo) {
-        // If this gallery isn't found,
+        // If this gallery isn't found, show the 404 page
         return <NotFound />;
     }
 

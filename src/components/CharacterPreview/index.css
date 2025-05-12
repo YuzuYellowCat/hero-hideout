@@ -5,13 +5,13 @@
 
 .character-thumbnail {
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     object-fit: scale-down;
     overflow: hidden;
-    max-height: 300px;
-    width: calc(100% - 8px);
-    height: calc(100% - 8px);
+    width: 100%;
+    height: 100%;
 }
 
 @media (width <= 700px) {

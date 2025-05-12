@@ -3,6 +3,8 @@ import { MyCharacterID, CharacterInfo, MyCharacters } from "appConstants";
 import PagePreviewSection from "components/PagePreviewSection";
 import { ReactComponent as Paw } from "images/paw.svg";
 import "./index.css";
+import LoadingBox from "components/LoadingBox";
+import useImageLoaded from "hooks/useImageLoaded";
 
 type CharacterPreviewProps = {
     id: MyCharacterID;
@@ -10,6 +12,7 @@ type CharacterPreviewProps = {
 
 const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
     const [imageSource, setImageSource] = React.useState();
+    const [ref, loaded, onLoad] = useImageLoaded();
     const [characterInfo, setCharacterInfo] = React.useState<CharacterInfo>();
 
     React.useEffect(() => {
@@ -18,9 +21,9 @@ const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
             const characterImg = require(`images/characters/${id}.png`);
             setImageSource(characterImg);
         } catch (e) {
-            console.log(e);
+            onLoad();
         }
-    }, [id]);
+    }, [id, onLoad]);
 
     if (!characterInfo) {
         return <></>;
@@ -31,6 +34,8 @@ const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
             className="character-thumbnail"
             src={imageSource}
             alt={`An icon for the character ${characterInfo.name}`}
+            ref={ref}
+            onLoad={onLoad}
         />
     ) : (
         <div className="character-thumbnail">
@@ -46,6 +51,7 @@ const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
                 hasFlourish={false}
                 fullHover
             >
+                {!loaded && <LoadingBox />}
                 {thumbnail}
             </PagePreviewSection>
         </div>

@@ -51,8 +51,10 @@ const CharacterPreview: React.FC<CharacterPreviewProps> = ({ id }) => {
                 hasFlourish={false}
                 fullHover
             >
-                {!loaded && <LoadingBox />}
-                {thumbnail}
+                <div className="character-thumbnail-wrapper">
+                    {!loaded && <LoadingBox />}
+                    {thumbnail}
+                </div>
             </PagePreviewSection>
         </div>
     );

@@ -14,7 +14,19 @@
     height: 100%;
 }
 
+.character-thumbnail-wrapper {
+    display: flex;
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
 @media (width <= 700px) {
+    .character-preview {
+        width: calc(50% - 8px);
+    }
+}
+
+@media (width <= 450px) {
     .character-preview {
         width: 100%;
     }

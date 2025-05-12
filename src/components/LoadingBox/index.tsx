@@ -1,8 +1,13 @@
 import React from "react";
 import "./index.css";
+import classNames from "classnames";
 
-const LoadingBox: React.FC = () => {
-    return <div className="loading-box" />;
+type LoadingBoxProps = {
+    className?: string;
+};
+
+const LoadingBox: React.FC<LoadingBoxProps> = ({ className }) => {
+    return <div className={classNames("loading-box", className)} />;
 };
 
 export default LoadingBox;

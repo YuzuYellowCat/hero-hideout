@@ -78,6 +78,35 @@ const Posts: Post[] = [
         credits: ["aussiekitten"],
         isNSFW: false,
     },
+    {
+        title: "Yuzu Popcat",
+        date: 1691345760,
+        images: [
+            {
+                src: "images/posts/2023-9-4_aussiekitten_popcat.gif",
+                altText:
+                    "A yellow cat with a black hat opens and closes his mouth",
+            },
+        ],
+        characters: ["yuzu"],
+        gallery: "comms",
+        credits: ["aussiekitten"],
+        isNSFW: false,
+    },
+    {
+        title: "Yuzu Coffee",
+        date: 1694456160,
+        images: [
+            {
+                src: "images/posts/2023-9-11_doqqo_png.png",
+                altText: "...",
+            },
+        ],
+        characters: ["yuzu"],
+        gallery: "comms",
+        credits: ["doqqo"],
+        isNSFW: false,
+    },
 ];
 
 export default Posts;

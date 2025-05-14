@@ -1,3 +1,5 @@
+import { jsonResponse } from "../utils/jsonResponse";
+
 export const onRequest = () => {
-    return new Response(new Date().toISOString());
+    return jsonResponse({ time: new Date().toISOString() });
 };

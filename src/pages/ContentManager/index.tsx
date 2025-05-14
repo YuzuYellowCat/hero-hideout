@@ -17,13 +17,15 @@ const ContentManager: React.FC = () => {
             const authString = btoa(
                 `${elements.username.value}:${elements.password.value}`
             );
-            const test = await fetch("https://yuzucat.com/api/posts", {
-                method: "GET",
-                headers: {
-                    Authorization: `Basic ${authString}`,
-                },
-            });
-            console.log(test.json());
+            const test = await fetch(
+                `${process.env.REACT_APP_ENDPOINT}/api/posts`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Basic ${authString}`,
+                    },
+                }
+            );
         },
         []
     );

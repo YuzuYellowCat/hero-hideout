@@ -22,6 +22,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
+        "dev": "wrangler pages dev --proxy 5173",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
@@ -45,6 +46,7 @@
         ]
     },
     "devDependencies": {
-        "@cloudflare/workers-types": "^4.20250514.0"
+        "@cloudflare/workers-types": "^4.20250514.0",
+        "wrangler": "^4.14.4"
     }
 }

@@ -10,6 +10,7 @@ import GalleryPage from "pages/GalleryPage";
 import Characters from "pages/Characters";
 import CharacterPage from "pages/CharacterPage";
 import CharacterRef from "pages/CharacterRef";
+import ContentManager from "pages/ContentManager";
 
 const App: React.FC = () => {
     return (
@@ -31,6 +32,10 @@ const App: React.FC = () => {
                     <Route
                         path="/characters/:character/ref"
                         element={<CharacterRef />}
+                    />
+                    <Route
+                        path="/content-manager"
+                        element={<ContentManager />}
                     />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

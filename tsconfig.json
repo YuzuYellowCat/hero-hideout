@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ESNext",
+        "target": "ES5",
         "lib": ["dom", "dom.iterable", "ESNext"],
         "allowJs": true,
         "skipLibCheck": true,
@@ -15,8 +15,7 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react-jsx",
-        "baseUrl": "src",
-        "types": ["@cloudflare/workers-types"]
+        "baseUrl": "src"
     },
     "include": ["src"]
 }

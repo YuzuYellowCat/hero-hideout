@@ -1,8 +1,3 @@
-import {
-    PagesFunction,
-    R2Bucket,
-    SecretsStoreSecret,
-} from "@cloudflare/workers-types";
 import { jsonResponse } from "../utils/jsonResponse";
 
 export const onRequestGet: PagesFunction<{

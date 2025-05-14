@@ -26,6 +26,10 @@ const ContentManager: React.FC = () => {
                     },
                 }
             );
+
+            const testJson = await test.json();
+
+            console.log(testJson);
         },
         []
     );

@@ -22,7 +22,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "dev": "wrangler pages dev --proxy 5173",
+        "dev": "npx wrangler pages dev functions --r2=POSTS",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

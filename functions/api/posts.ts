@@ -5,7 +5,7 @@ export const onRequest: PagesFunction<{
     AUTH: string;
 }> = async ({ request, env }) => {
     if (request.method === "GET") {
-        const authSecret = await env.AUTH;
+        const authSecret = env.AUTH;
         const requestAuth = request.headers.get("Authorization")?.split(" ")[1];
         if (authSecret !== requestAuth) {
             return jsonResponse({

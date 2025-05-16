@@ -16,6 +16,5 @@ export const jsonResponse = (value: any, init: ResponseInit = {}) => {
         "Access-Control-Allow-Headers",
         "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization"
     );
-    console.log(res);
     return res;
 };

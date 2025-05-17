@@ -24,3 +24,5 @@ yarn-error.log*
 
 .wrangler
 .dev.vars
+
+db_schema/test.db

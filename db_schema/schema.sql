@@ -39,7 +39,6 @@ INSERT INTO Credits (CreditName) VALUES
     ('imdanuki');
 
 DROP TABLE IF EXISTS CreditLinks;
-DROP TABLE IF EXISTS CreditsLinks;
 CREATE TABLE IF NOT EXISTS CreditLinks (
     CreditId INTEGER NOT NULL,
     Type TEXT NOT NULL,
@@ -67,8 +66,8 @@ INSERT INTO PostCredits (PostId, CreditId) VALUES
 DROP TABLE IF EXISTS PostImages;
 CREATE TABLE IF NOT EXISTS PostImages (
     ImageId INTEGER PRIMARY KEY AUTOINCREMENT, 
-    PostId INTEGER NOT NULL,
-    Blob BLOB NOT NULL,
+    Path INTEGER NOT NULL,
+    Past TEXT NOT NULL,
     AltText Text NOT NULL,
     FOREIGN KEY (PostId) REFERENCES Posts(PostId),
     UNIQUE (Blob)

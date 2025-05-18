@@ -14,9 +14,7 @@ export const onRequest: PagesFunction<{
     }
     if (request.method === "GET") {
         console.log("GET");
-        const test = await env.POSTS.get(
-            "9fa6c929-e322-457a-89f3-301042980ecd"
-        );
+        const test = await env.POSTS.get("test-file.png");
         return jsonResponse(test);
     }
     if (request.method === "POST") {

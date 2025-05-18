@@ -6,7 +6,7 @@ interface FormElements extends HTMLFormControlsCollection {
     password: HTMLInputElement;
     operation: HTMLSelectElement;
     upload?: HTMLInputElement;
-    imageId?: HTMLInputElement;
+    imageId: HTMLInputElement;
 }
 interface PostFormElement extends HTMLFormElement {
     readonly elements: FormElements;
@@ -28,8 +28,9 @@ const ContentManager: React.FC = () => {
             }
 
             const body = isPost ? file : undefined;
-            const test = await fetch(
-                `${process.env.REACT_APP_ENDPOINT}/api/posts`,
+
+            await fetch(
+                `${process.env.REACT_APP_ENDPOINT}/api/images/${elements.imageId.value}`,
                 {
                     method: isPost ? "POST" : "GET",
                     headers: {
@@ -38,28 +39,19 @@ const ContentManager: React.FC = () => {
                     body,
                 }
             );
-
-            const testJson = await test.json();
-
-            console.log(testJson);
         },
         []
     );
 
     const [operation, setOperation] = React.useState<"GET" | "POST">("GET");
 
-    const content =
-        operation === "GET" ? (
-            <>
-                <label htmlFor="imageId">Image ID:</label>
-                <input type="input" name="imageId" id="imageId" />
-            </>
-        ) : (
-            <>
-                <label htmlFor="upload">Upload Image</label>
-                <input type="file" id="upload" accept="image/*" />
-            </>
-        );
+    const content = operation === "POST" && (
+        <>
+            <label htmlFor="upload">Upload Image</label>
+            <input type="file" id="upload" accept="image/*" />
+            <br />
+        </>
+    );
 
     return (
         <PageWrapper
@@ -102,9 +94,19 @@ const ContentManager: React.FC = () => {
                         <option value="post">POST</option>
                     </select>
                     <br />
-                    {content}
+                    <label htmlFor="imageId">Image ID:</label>
+                    <input type="input" name="imageId" id="imageId" required />
                     <br />
+                    {content}
                     <input type="submit" value="Do something" />
+                    <img
+                        src={`${process.env.REACT_APP_ENDPOINT}/api/images/cool-stuff.jpg`}
+                        style={{
+                            width: "300px",
+                            height: "300px",
+                        }}
+                        alt=""
+                    />
                 </form>
             </div>
         </PageWrapper>

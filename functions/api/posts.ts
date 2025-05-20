@@ -14,10 +14,6 @@ export const onRequest: PagesFunction<{
         const { results } = await env.DB.prepare(
             "SELECT * FROM Posts INNER JOIN PostImages ON Posts.PostId = PostImages.PostID"
         ).all();
-        const { results: results2 } = await env.DB.prepare(
-            "SELECT * FROM PostImages"
-        ).all();
-        console.log(results2);
         return jsonResponse(results);
     }
     if (request.method === "OPTIONS") {

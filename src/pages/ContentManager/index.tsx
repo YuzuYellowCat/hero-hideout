@@ -4,9 +4,10 @@ import PageWrapper from "components/PageWrapper";
 interface FormElements extends HTMLFormControlsCollection {
     username: HTMLInputElement;
     password: HTMLInputElement;
-    operation: HTMLSelectElement;
-    upload?: HTMLInputElement;
-    imageId: HTMLInputElement;
+    upload: HTMLInputElement;
+    name: HTMLInputElement;
+    description?: HTMLTextAreaElement;
+    isNSFW: HTMLInputElement;
 }
 interface PostFormElement extends HTMLFormElement {
     readonly elements: FormElements;
@@ -21,42 +22,33 @@ const ContentManager: React.FC = () => {
                 `${elements.username.value}:${elements.password.value}`
             );
 
-            const isPost = elements.operation.selectedIndex === 1;
+            const body = new FormData();
+
             const file = elements.upload?.files?.[0];
-            if (!file && isPost) {
+            if (!file) {
                 return;
             }
 
-            const body = isPost ? file : undefined;
+            body.set("file", file);
+            body.set("name", elements.name.value);
+            body.set("description", elements.description?.value ?? "");
+            body.set("isNSFW", (elements.isNSFW.checked ?? false).toString());
 
-            await fetch(
-                `${process.env.REACT_APP_ENDPOINT}/api/images/${elements.imageId.value}`,
-                {
-                    method: isPost ? "POST" : "GET",
-                    headers: {
-                        Authorization: `Basic ${authString}`,
-                    },
-                    body,
-                }
-            );
+            await fetch(`${process.env.REACT_APP_ENDPOINT}/api/posts/`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Basic ${authString}`,
+                },
+                body,
+            });
         },
         []
-    );
-
-    const [operation, setOperation] = React.useState<"GET" | "POST">("GET");
-
-    const content = operation === "POST" && (
-        <>
-            <label htmlFor="upload">Upload Image</label>
-            <input type="file" id="upload" accept="image/*" />
-            <br />
-        </>
     );
 
     return (
         <PageWrapper
             color="#ffffff"
-            title="404 - Not Found"
+            title="Content Manager"
             alignItems="center"
         >
             <div className="content-manager-wrapper">
@@ -77,36 +69,21 @@ const ContentManager: React.FC = () => {
                         required
                     />
                     <br />
-                    <label htmlFor="operation">Operation</label>
-                    <select
-                        id="operation"
-                        name="operation"
-                        size={2}
-                        onChange={(e) => {
-                            const operation =
-                                e.currentTarget.options[
-                                    e.currentTarget.selectedIndex
-                                ].text;
-                            setOperation(operation as "GET" | "POST");
-                        }}
-                    >
-                        <option value="get">GET</option>
-                        <option value="post">POST</option>
-                    </select>
+                    -
                     <br />
-                    <label htmlFor="imageId">Image ID:</label>
-                    <input type="input" name="imageId" id="imageId" required />
+                    <label htmlFor="upload">Upload Image</label>
+                    <input type="file" id="upload" accept="image/*" required />
                     <br />
-                    {content}
+                    <label htmlFor="name">Name</label>
+                    <input type="input" name="name" id="name" required />
+                    <br />
+                    <label htmlFor="description">Description</label>
+                    <textarea name="description" id="description" />
+                    <br />
+                    <label htmlFor="isNSFW">isNSFW</label>
+                    <input type="checkbox" name="isNSFW" id="isNSFW" />
+                    <br />
                     <input type="submit" value="Do something" />
-                    <img
-                        src={`${process.env.REACT_APP_ENDPOINT}/api/images/cool-stuff.jpg`}
-                        style={{
-                            width: "300px",
-                            height: "300px",
-                        }}
-                        alt=""
-                    />
                 </form>
             </div>
         </PageWrapper>

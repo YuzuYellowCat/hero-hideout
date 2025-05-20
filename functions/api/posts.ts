@@ -1,26 +1,68 @@
-import { jsonResponse } from "../utils/jsonResponse";
+import {
+    jsonResponse,
+    authErrorResponse,
+    invalidInputResponse,
+} from "../utils/responses";
+import { isAuthorized } from "../utils/checkAuth";
 
 export const onRequest: PagesFunction<{
-    POSTS: R2Bucket;
+    DB: D1Database;
     AUTH: string;
+    IMAGES: R2Bucket;
 }> = async ({ request, env }) => {
-    const authSecret = env.AUTH;
-    const requestAuth = request.headers.get("Authorization")?.split(" ")[1];
-    if (authSecret !== requestAuth) {
-        return jsonResponse({
-            error: 404,
-            message: "Auth not valid",
-        });
-    }
     if (request.method === "GET") {
-        console.log("GET");
-        const test = await env.POSTS.get("test-file.png");
-        return jsonResponse(test);
+        const { results } = await env.DB.prepare(
+            "SELECT * FROM Posts INNER JOIN PostImages ON Posts.PostId = PostImages.PostID"
+        ).all();
+        const { results: results2 } = await env.DB.prepare(
+            "SELECT * FROM PostImages"
+        ).all();
+        console.log(results2);
+        return jsonResponse(results);
     }
+    if (request.method === "OPTIONS") {
+        return jsonResponse({});
+    }
+
+    if (!isAuthorized({ secret: env.AUTH, request })) {
+        return authErrorResponse();
+    }
+
     if (request.method === "POST") {
-        const body = request.body;
-        const put = env.POSTS.put("test-file.png", body);
-        return jsonResponse(put);
+        const formData = await request.formData();
+        console.log(formData.get("file"));
+        const file: any = formData.get("file");
+
+        if (!(file instanceof File)) {
+            return invalidInputResponse();
+        }
+
+        const fileExtension = file.name.split(".").pop();
+        const imageName = crypto.randomUUID() + "." + fileExtension;
+
+        const [{ results }] = await Promise.all([
+            env.DB.prepare(
+                "INSERT INTO Posts (Date, Title, Description, IsNSFW) VALUES (strftime('%s', 'now'), ?, ?, ?) RETURNING PostId"
+            )
+                .bind(
+                    formData.get("name"),
+                    formData.get("description"),
+                    formData.get("isNSFW") === "false" ? 0 : 1
+                )
+                .all(),
+            env.IMAGES.put(imageName, file),
+        ]);
+
+        const postId = results[0].PostId;
+
+        await env.DB.prepare(
+            "INSERT INTO PostImages (PostId, ImageName, AltText, IsCover) VALUES (?, ?, ?, ?)"
+        )
+            .bind(postId, imageName, "Test Alt Text", 1)
+            .all();
+
+        return jsonResponse({});
     }
+
     return jsonResponse({});
 };

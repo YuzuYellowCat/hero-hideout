@@ -1,17 +1,14 @@
-import { defaultResponse } from "../../utils/defaultResponse";
-import { jsonResponse } from "../../utils/jsonResponse";
-import { isAuthorized } from "../../utils/checkAuth";
+import { jsonResponse, defaultResponse } from "../../utils/responses";
 
 export const onRequest: PagesFunction<{
-    POSTS: R2Bucket;
+    IMAGES: R2Bucket;
     AUTH: string;
 }> = async ({ request, env, params }) => {
     if (request.method === "GET") {
         if (!params.image || Array.isArray(params)) {
             return jsonResponse({});
         }
-        const test = await env.POSTS.get(params.image as string);
-        console.log(await env.POSTS.list());
+        const test = await env.IMAGES.get(params.image as string);
         if (!test) {
             return jsonResponse({});
         }
@@ -20,14 +17,6 @@ export const onRequest: PagesFunction<{
                 "Content-Type": "image/*",
             },
         });
-    }
-    if (request.method === "POST") {
-        if (!isAuthorized({ secret: env.AUTH, request })) {
-            return new Response("Unauthorized", { status: 401 });
-        }
-        const blob = await request.blob();
-        await env.POSTS.put(params.image as string, blob);
-        return jsonResponse({ message: "Did it!" });
     }
     return jsonResponse({});
 };

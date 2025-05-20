@@ -1,3 +1,21 @@
+export const authErrorResponse = () => {
+    return defaultResponse("Unauthorized", { status: 401 });
+};
+
+export const invalidInputResponse = () => {
+    return defaultResponse("Invalid Input", { status: 422 });
+};
+
+export const jsonResponse = (value: any, init: ResponseInit = {}) => {
+    return defaultResponse(JSON.stringify(value), {
+        headers: {
+            "Content-Type": "application/json",
+            ...init.headers,
+        },
+        ...init,
+    });
+};
+
 export const defaultResponse = (value: any, init: ResponseInit = {}) => {
     const res = new Response(value, init);
     res.headers.set("Access-Control-Allow-Origin", "*");

@@ -11,6 +11,7 @@ import Characters from "pages/Characters";
 import CharacterPage from "pages/CharacterPage";
 import CharacterRef from "pages/CharacterRef";
 import ContentManager from "pages/ContentManager";
+import Testing from "pages/Testing";
 
 const App: React.FC = () => {
     return (
@@ -37,6 +38,8 @@ const App: React.FC = () => {
                         path="/content-manager"
                         element={<ContentManager />}
                     />
+                    <Route path="/testing" element={<Testing />} />
+
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <div className="bg">

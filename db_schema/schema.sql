@@ -1,15 +1,15 @@
-PRAGMA foreign_keys = OFF;
+-- PRAGMA foreign_keys = OFF;
 
-DROP TABLE IF EXISTS Galleries;
-DROP TABLE IF EXISTS Posts;
-DROP TABLE IF EXISTS Credits;
-DROP TABLE IF EXISTS CreditLinks;
-DROP TABLE IF EXISTS PostCredits;
-DROP TABLE IF EXISTS PostImages;
-DROP TABLE IF EXISTS Characters;
-DROP TABLE IF EXISTS PostCharacters;
+-- DROP TABLE IF EXISTS Galleries;
+-- DROP TABLE IF EXISTS Posts;
+-- DROP TABLE IF EXISTS Credits;
+-- DROP TABLE IF EXISTS CreditLinks;
+-- DROP TABLE IF EXISTS PostCredits;
+-- DROP TABLE IF EXISTS PostImages;
+-- DROP TABLE IF EXISTS Characters;
+-- DROP TABLE IF EXISTS PostCharacters;
 
-PRAGMA foreign_keys = ON;
+-- PRAGMA foreign_keys = ON;
 
 CREATE TABLE IF NOT EXISTS Galleries (
     GalleryId INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -84,9 +84,10 @@ CREATE TABLE IF NOT EXISTS PostImages (
 --     (2, 'cool-img2.jpg', 'Mercurial doing stuff', 1);
 
 CREATE TABLE IF NOT EXISTS Characters (
-    CharacterId INTEGER PRIMARY KEY AUTOINCREMENT, 
+    CharacterId TEXT PRIMARY KEY, 
     Name TEXT NOT NULL,
-    Color TEXT,
+    Color TEXT NOT NULL,
+    ImageName TEXT,
     IsGuest BOOLEAN NOT NULL CHECK (IsGuest IN (0, 1)),
     UNIQUE (Name)
 );
@@ -97,7 +98,7 @@ CREATE TABLE IF NOT EXISTS Characters (
 
 CREATE TABLE IF NOT EXISTS PostCharacters (
     PostId INTEGER NOT NULL,
-    CharacterId INTEGER NOT NULL,
+    CharacterId TEXT NOT NULL,
     FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
     FOREIGN KEY (CharacterId) REFERENCES Characters(CharacterId) ON DELETE CASCADE,
     UNIQUE (PostId, CharacterId)

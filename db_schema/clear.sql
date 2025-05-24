@@ -1,0 +1,12 @@
+PRAGMA foreign_keys = OFF;
+
+DROP TABLE IF EXISTS Galleries;
+DROP TABLE IF EXISTS Posts;
+DROP TABLE IF EXISTS Credits;
+DROP TABLE IF EXISTS CreditLinks;
+DROP TABLE IF EXISTS PostCredits;
+DROP TABLE IF EXISTS PostImages;
+DROP TABLE IF EXISTS Characters;
+DROP TABLE IF EXISTS PostCharacters;
+
+PRAGMA foreign_keys = ON;

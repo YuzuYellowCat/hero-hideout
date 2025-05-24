@@ -73,12 +73,12 @@ export const MyCharacters: MyCharactersType = {
         color: "#ba0203",
         RefContents: MercurialRefContents,
     },
-    // For testing the placeholder img
-    // placeholder: {
-    //     name: "Placeholder",
-    //     RefContents: MercurialRefContents,
-    //     color: "#b4db3d",
-    // },
+};
+
+export const RefContentsMapper = {
+    yuzu: YuzuRefContents,
+    dawnwhisker: DawnWhiskerRefContents,
+    mercurial: MercurialRefContents,
 };
 
 type GuestCharactersType = {

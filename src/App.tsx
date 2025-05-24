@@ -12,6 +12,7 @@ import CharacterPage from "pages/CharacterPage";
 import CharacterRef from "pages/CharacterRef";
 import ContentManager from "pages/ContentManager";
 import Testing from "pages/Testing";
+import { CharacterProvider } from "contexts/CharacterContext";
 
 const App: React.FC = () => {
     return (
@@ -25,14 +26,29 @@ const App: React.FC = () => {
                         path="/galleries/:gallery"
                         element={<GalleryPage />}
                     />
-                    <Route path="/characters" element={<Characters />} />
+                    <Route
+                        path="/characters"
+                        element={
+                            <CharacterProvider>
+                                <Characters />
+                            </CharacterProvider>
+                        }
+                    />
                     <Route
                         path="/characters/:character"
-                        element={<CharacterPage />}
+                        element={
+                            <CharacterProvider>
+                                <CharacterPage />
+                            </CharacterProvider>
+                        }
                     />
                     <Route
                         path="/characters/:character/ref"
-                        element={<CharacterRef />}
+                        element={
+                            <CharacterProvider>
+                                <CharacterRef />
+                            </CharacterProvider>
+                        }
                     />
                     <Route
                         path="/content-manager"

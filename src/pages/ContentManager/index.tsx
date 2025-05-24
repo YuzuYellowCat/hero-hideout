@@ -1,19 +1,35 @@
 import React from "react";
 import PageWrapper from "components/PageWrapper";
+import Posts from "./Posts";
+import Characters from "./Characters";
+import "./index.css";
 
 interface FormElements extends HTMLFormControlsCollection {
     username: HTMLInputElement;
     password: HTMLInputElement;
-    upload: HTMLInputElement;
-    name: HTMLInputElement;
+    upload?: HTMLInputElement;
+    name?: HTMLInputElement;
     description?: HTMLTextAreaElement;
-    isNSFW: HTMLInputElement;
+    characterId?: HTMLInputElement;
+    color?: HTMLInputElement;
+    isNSFW?: HTMLInputElement;
+    isGuest?: HTMLInputElement;
 }
 interface PostFormElement extends HTMLFormElement {
     readonly elements: FormElements;
 }
 
+type Endpoints = "Posts" | "Characters";
+
+const EndpointContent: {
+    [key in Endpoints]: React.FC;
+} = {
+    Posts,
+    Characters,
+};
+
 const ContentManager: React.FC = () => {
+    const [endpoint, setEndpoint] = React.useState<Endpoints>("Posts");
     const onSubmit: React.FormEventHandler<PostFormElement> = React.useCallback(
         async (event) => {
             event.preventDefault();
@@ -24,26 +40,48 @@ const ContentManager: React.FC = () => {
 
             const body = new FormData();
 
-            const file = elements.upload?.files?.[0];
-            if (!file) {
-                return;
-            }
+            elements.upload?.files &&
+                body.set("file", elements.upload?.files?.[0]);
+            elements.name && body.set("name", elements.name.value);
+            elements.description &&
+                body.set("description", elements.description.value);
+            elements.isNSFW &&
+                body.set(
+                    "isNSFW",
+                    (elements.isNSFW.checked ?? false).toString()
+                );
+            elements.isGuest &&
+                body.set(
+                    "isGuest",
+                    (elements.isGuest.checked ?? false).toString()
+                );
+            elements.characterId &&
+                body.set("characterId", elements.characterId.value);
 
-            body.set("file", file);
-            body.set("name", elements.name.value);
-            body.set("description", elements.description?.value ?? "");
-            body.set("isNSFW", (elements.isNSFW.checked ?? false).toString());
+            elements.color && body.set("color", elements.color.value);
 
-            await fetch(`${process.env.REACT_APP_ENDPOINT}/api/posts/`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Basic ${authString}`,
-                },
-                body,
-            });
+            await fetch(
+                `${
+                    process.env.REACT_APP_ENDPOINT
+                }/api/${endpoint.toLowerCase()}/`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Basic ${authString}`,
+                    },
+                    body,
+                }
+            );
         },
-        []
+        [endpoint]
     );
+
+    const onChange: React.ChangeEventHandler<HTMLSelectElement> =
+        React.useCallback((e) => {
+            setEndpoint(e.target.value as Endpoints);
+        }, []);
+
+    const Content = EndpointContent[endpoint];
 
     return (
         <PageWrapper
@@ -53,37 +91,45 @@ const ContentManager: React.FC = () => {
         >
             <div className="content-manager-wrapper">
                 <form onSubmit={onSubmit}>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="input"
-                        name="username"
-                        id="username"
-                        required
-                    />
+                    <label htmlFor="username">
+                        Username:
+                        <input
+                            type="input"
+                            name="username"
+                            id="username"
+                            required
+                        />
+                    </label>
                     <br />
-                    <label htmlFor="username">Password:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        required
-                    />
+                    <label htmlFor="username">
+                        Password:
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            required
+                        />
+                    </label>
                     <br />
-                    -
+                    <label htmlFor="endpoint">
+                        Endpoint:
+                        <select
+                            name="endpoint"
+                            id="endpoint"
+                            onChange={onChange}
+                        >
+                            <option value="Posts">Posts</option>
+                            <option value="Characters">Characters</option>
+                        </select>
+                    </label>
                     <br />
-                    <label htmlFor="upload">Upload Image</label>
-                    <input type="file" id="upload" accept="image/*" required />
+                    ---
                     <br />
-                    <label htmlFor="name">Name</label>
-                    <input type="input" name="name" id="name" required />
+                    <Content />
                     <br />
-                    <label htmlFor="description">Description</label>
-                    <textarea name="description" id="description" />
+                    ---
                     <br />
-                    <label htmlFor="isNSFW">isNSFW</label>
-                    <input type="checkbox" name="isNSFW" id="isNSFW" />
-                    <br />
-                    <input type="submit" value="Do something" />
+                    <input type="submit" value="Post" />
                 </form>
             </div>
         </PageWrapper>

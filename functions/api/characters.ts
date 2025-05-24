@@ -13,7 +13,7 @@ export const onRequest: PagesFunction<{
 }> = async ({ request, env }) => {
     if (request.method === "GET") {
         const { results } = await env.DB.prepare(
-            "SELECT * FROM Posts INNER JOIN PostImages ON Posts.PostId = PostImages.PostId"
+            "SELECT * FROM Characters WHERE IsGuest = 0"
         ).all();
         return jsonResponse(results);
     }
@@ -26,40 +26,35 @@ export const onRequest: PagesFunction<{
     }
 
     if (request.method === "POST") {
-        let validatedFormData: PostsPOST;
+        let validatedFormData: CharactersPOST;
         try {
             const formData = await request.formData();
-            validatedFormData = formDataValidator<PostsPOST>(
-                Forms.POST,
+            validatedFormData = formDataValidator<CharactersPOST>(
+                Forms.CHARACTER,
                 formData
             );
         } catch {
             return invalidInputResponse();
         }
-
-        const fileExtension = validatedFormData.file.name.split(".").pop();
+        const fileExtension = validatedFormData.file?.name.split(".").pop();
         const imageName = crypto.randomUUID() + "." + fileExtension;
 
-        const [{ results }] = await Promise.all([
+        await Promise.all([
             env.DB.prepare(
-                "INSERT INTO Posts (Date, Title, Description, IsNSFW) VALUES (strftime('%s', 'now'), ?, ?, ?) RETURNING PostId"
+                "INSERT INTO Characters (CharacterId, Name, Color, ImageName, IsGuest) VALUES (?, ?, ?, ?, ?)"
             )
                 .bind(
+                    validatedFormData.characterId,
                     validatedFormData.name,
-                    validatedFormData.description,
-                    validatedFormData.isNSFW ? 1 : 0
+                    validatedFormData.color,
+                    validatedFormData.file ? imageName : null,
+                    validatedFormData.isGuest ? 1 : 0
                 )
                 .all(),
-            env.IMAGES.put(imageName, validatedFormData.file),
+            validatedFormData.file
+                ? env.IMAGES.put(imageName, validatedFormData.file)
+                : Promise.resolve(),
         ]);
-
-        const postId = results[0].PostId;
-
-        await env.DB.prepare(
-            "INSERT INTO PostImages (PostId, ImageName, AltText, IsCover) VALUES (?, ?, ?, ?)"
-        )
-            .bind(postId, imageName, "Test Alt Text", 1)
-            .all();
 
         return jsonResponse({});
     }

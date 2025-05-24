@@ -6,6 +6,13 @@ export const invalidInputResponse = () => {
     return defaultResponse("Invalid Input", { status: 422 });
 };
 
+export const genericErrorResponse = () => {
+    return defaultResponse(
+        "The application has encountered an unknown error.",
+        { status: 400 }
+    );
+};
+
 export const jsonResponse = (value: any, init: ResponseInit = {}) => {
     return defaultResponse(JSON.stringify(value), {
         headers: {

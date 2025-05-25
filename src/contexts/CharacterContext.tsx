@@ -1,4 +1,5 @@
 import React from "react";
+import fetch from "utils/fetch";
 
 let _characterCache: Map<String, Character> = new Map();
 
@@ -15,7 +16,7 @@ export const CharacterProvider: React.FC<React.PropsWithChildren> = ({
             setCharacters(_characterCache);
             return;
         }
-        fetch(`${process.env.REACT_APP_ENDPOINT}/api/characters`, {
+        fetch("/characters", {
             method: "GET",
         })
             .then((res) => res.json())

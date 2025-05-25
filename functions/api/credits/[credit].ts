@@ -1,9 +1,10 @@
 import { jsonResponse } from "../../utils/responses";
 
-export const onRequest: PagesFunction<{
-    DB: D1Database;
-    AUTH: string;
-}> = async ({ request, env, params }) => {
+export const onRequest: PagesFunction<Env> = async ({
+    request,
+    env,
+    params,
+}) => {
     if (request.method === "GET") {
         if (!params.credit || Array.isArray(params)) {
             return jsonResponse({});

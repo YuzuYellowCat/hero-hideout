@@ -1,10 +1,11 @@
 import React from "react";
 import PageWrapper from "components/PageWrapper";
+import fetch, { getImageUrl } from "utils/fetch";
 
 const Testing: React.FC = () => {
     const [postImages, setPostImages] = React.useState<any[] | null>(null);
     React.useEffect(() => {
-        fetch(`${process.env.REACT_APP_ENDPOINT}/api/posts`, {
+        fetch("/posts", {
             method: "GET",
         })
             .then((res) => res.json())
@@ -21,7 +22,7 @@ const Testing: React.FC = () => {
                 <div key={pi.ImageId}>
                     <img
                         style={{ width: 200, height: 200 }}
-                        src={`${process.env.REACT_APP_ENDPOINT}/api/images/${pi.ImageName}`}
+                        src={getImageUrl(pi.ImageName)}
                         alt={pi.AltText}
                     />
                     <span>{pi.Title}</span>

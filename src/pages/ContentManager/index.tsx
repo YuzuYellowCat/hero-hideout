@@ -3,6 +3,7 @@ import PageWrapper from "components/PageWrapper";
 import Posts from "./Posts";
 import Characters from "./Characters";
 import "./index.css";
+import fetch from "utils/fetch";
 
 interface FormElements extends HTMLFormControlsCollection {
     username: HTMLInputElement;
@@ -60,18 +61,13 @@ const ContentManager: React.FC = () => {
 
             elements.color && body.set("color", elements.color.value);
 
-            await fetch(
-                `${
-                    process.env.REACT_APP_ENDPOINT
-                }/api/${endpoint.toLowerCase()}/`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Basic ${authString}`,
-                    },
-                    body,
-                }
-            );
+            await fetch(`/${endpoint.toLowerCase()}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Basic ${authString}`,
+                },
+                body,
+            });
         },
         [endpoint]
     );

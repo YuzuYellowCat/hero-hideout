@@ -4,6 +4,7 @@ import { ReactComponent as Paw } from "images/paw.svg";
 import "./index.css";
 import LoadingBox from "components/LoadingBox";
 import useImageLoaded from "hooks/useImageLoaded";
+import { getImageUrl } from "utils/fetch";
 
 type CharacterPreviewProps = {
     character: Character;
@@ -15,7 +16,7 @@ const CharacterPreview: React.FC<CharacterPreviewProps> = ({ character }) => {
     const thumbnail = character.image ? (
         <img
             className="character-thumbnail"
-            src={`${process.env.REACT_APP_ENDPOINT}/api/images/${character.image}`}
+            src={getImageUrl(character.image)}
             alt={`An icon for the character ${character.name} made by KiyoneScarlet`}
             ref={ref}
             onLoad={onLoad}

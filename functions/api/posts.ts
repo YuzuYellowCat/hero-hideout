@@ -1,68 +1,62 @@
 import {
     jsonResponse,
-    authErrorResponse,
     invalidInputResponse,
+    optionsResponse,
 } from "../utils/responses";
-import { isAuthorized } from "../utils/checkAuth";
 import { formDataValidator, Forms } from "../utils/validate";
+import { authWrapper } from "../utils/wrappers";
 
-export const onRequest: PagesFunction<{
-    DB: D1Database;
-    AUTH: string;
-    IMAGES: R2Bucket;
-}> = async ({ request, env }) => {
+export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
+    if (request.method === "OPTIONS") {
+        return optionsResponse();
+    }
+
     if (request.method === "GET") {
         const { results } = await env.DB.prepare(
             "SELECT * FROM Posts INNER JOIN PostImages ON Posts.PostId = PostImages.PostId"
         ).all();
         return jsonResponse(results);
     }
-    if (request.method === "OPTIONS") {
-        return jsonResponse({});
-    }
-
-    if (!isAuthorized({ secret: env.AUTH, request })) {
-        return authErrorResponse();
-    }
 
     if (request.method === "POST") {
-        let validatedFormData: PostsPOST;
-        try {
-            const formData = await request.formData();
-            validatedFormData = formDataValidator<PostsPOST>(
-                Forms.POST,
-                formData
-            );
-        } catch {
-            return invalidInputResponse();
-        }
+        return authWrapper({ secret: env.AUTH, request }, async () => {
+            let validatedFormData: PostsPOST;
+            try {
+                const formData = await request.formData();
+                validatedFormData = formDataValidator<PostsPOST>(
+                    Forms.POST,
+                    formData
+                );
+            } catch {
+                return invalidInputResponse();
+            }
 
-        const fileExtension = validatedFormData.file.name.split(".").pop();
-        const imageName = crypto.randomUUID() + "." + fileExtension;
+            const fileExtension = validatedFormData.file.name.split(".").pop();
+            const imageName = crypto.randomUUID() + "." + fileExtension;
 
-        const [{ results }] = await Promise.all([
-            env.DB.prepare(
-                "INSERT INTO Posts (Date, Title, Description, IsNSFW) VALUES (strftime('%s', 'now'), ?, ?, ?) RETURNING PostId"
-            )
-                .bind(
-                    validatedFormData.name,
-                    validatedFormData.description,
-                    validatedFormData.isNSFW ? 1 : 0
+            const [{ results }] = await Promise.all([
+                env.DB.prepare(
+                    "INSERT INTO Posts (Date, Title, Description, IsNSFW) VALUES (strftime('%s', 'now'), ?, ?, ?) RETURNING PostId"
                 )
-                .all(),
-            env.IMAGES.put(imageName, validatedFormData.file),
-        ]);
+                    .bind(
+                        validatedFormData.name,
+                        validatedFormData.description,
+                        validatedFormData.isNSFW ? 1 : 0
+                    )
+                    .all(),
+                env.IMAGES.put(imageName, validatedFormData.file),
+            ]);
 
-        const postId = results[0].PostId;
+            const postId = results[0].PostId;
 
-        await env.DB.prepare(
-            "INSERT INTO PostImages (PostId, ImageName, AltText, IsCover) VALUES (?, ?, ?, ?)"
-        )
-            .bind(postId, imageName, "Test Alt Text", 1)
-            .all();
+            await env.DB.prepare(
+                "INSERT INTO PostImages (PostId, ImageName, AltText, IsCover) VALUES (?, ?, ?, ?)"
+            )
+                .bind(postId, imageName, "Test Alt Text", 1)
+                .all();
 
-        return jsonResponse({});
+            return jsonResponse({});
+        });
     }
-
     return jsonResponse({});
 };

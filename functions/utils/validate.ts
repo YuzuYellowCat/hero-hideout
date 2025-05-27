@@ -12,7 +12,7 @@ type FormType = {
 };
 
 const FormTypes: {
-    [key: string]: (optional?: boolean) => FormType;
+    [key: string]: (...args: [...args: any, optional?: boolean]) => FormType;
 } = {
     STRING: (optional: boolean = false) => ({
         validator: (input) => typeof input === "string",
@@ -29,15 +29,29 @@ const FormTypes: {
         mapper: (input) => input === "true",
         optional,
     }),
+    INTEGER: (optional: boolean = false) => ({
+        validator: (input: string) => !isNaN(parseInt(input)),
+        mapper: (input: string) => parseInt(input),
+        optional,
+    }),
+    ENUM: (values: string[], optional: boolean = false) => ({
+        validator: (input: string) => values.includes(input),
+        mapper: (input: string) => input,
+        optional,
+    }),
 };
 
 export const Forms: {
     [key: string]: Form;
 } = {
     POST: {
+        postId: FormTypes.STRING(),
         file: FormTypes.FILE(),
-        name: FormTypes.STRING(),
-        description: FormTypes.STRING(),
+        title: FormTypes.STRING(),
+        date: FormTypes.INTEGER(true),
+        description: FormTypes.STRING(true),
+        tags: FormTypes.STRING(true),
+        type: FormTypes.ENUM(["Commission", "Art", "Fursuit"]),
         isNSFW: FormTypes.BOOLEAN(),
     },
     CHARACTER: {

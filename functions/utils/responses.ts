@@ -3,7 +3,7 @@ import { env } from "cloudflare:workers";
 export const optionsResponse = (
     allowedMethods = "GET,HEAD,OPTIONS,POST,PUT"
 ) => {
-    const res = defaultResponse("Preflight Response", { status: 204 });
+    const res = defaultResponse(undefined, { status: 204 });
     res.headers.set("Connection", "keep-alive");
     res.headers.set("Access-Control-Allow-Methods", allowedMethods);
     res.headers.set("Access-Control-Allow-Credentials", "true");

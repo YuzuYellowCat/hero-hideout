@@ -11,25 +11,19 @@
 
 -- PRAGMA foreign_keys = ON;
 
-CREATE TABLE IF NOT EXISTS Galleries (
-    GalleryId INTEGER PRIMARY KEY AUTOINCREMENT, 
-    Name TEXT NOT NULL,
-    UNIQUE (Name)
-);
-
 -- INSERT INTO Galleries (Name) VALUES
 --     ('Fursuit'),
 --     ('Commissions'),
 --     ('My Drawings');
 
 CREATE TABLE IF NOT EXISTS Posts (
-    PostId INTEGER PRIMARY KEY AUTOINCREMENT, 
+    PostId TEXT PRIMARY KEY, 
     Title TEXT NOT NULL,
     Description TEXT,
     Date INTEGER NOT NULL,
     IsNSFW BOOLEAN NOT NULL CHECK (IsNSFW IN (0, 1)),
-    GalleryId INTEGER,
-    FOREIGN KEY (GalleryId) REFERENCES Galleries(GalleryId)
+    Type TEXT NOT NULL, -- Commission, Art, or Fursuit
+    Tags TEXT -- Comma separated set of strings
 );
 
 -- INSERT INTO Posts (Title, Date, IsNSFW, GalleryId) VALUES 
@@ -38,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Posts (
 
 
 CREATE TABLE IF NOT EXISTS Credits (
-    CreditId INTEGER PRIMARY KEY AUTOINCREMENT, 
+    CreditId TEXT PRIMARY KEY, 
     CreditName TEXT NOT NULL,
     UNIQUE (CreditId, CreditName)
 );
@@ -47,8 +41,8 @@ CREATE TABLE IF NOT EXISTS Credits (
 --     ('imdanuki');
 
 CREATE TABLE IF NOT EXISTS CreditLinks (
-    CreditId INTEGER NOT NULL,
-    Type TEXT NOT NULL,
+    CreditId TEXT NOT NULL,
+    Type TEXT NOT NULL, -- Bluesky, Etc?
     Link TEXT NOT NULL,
     FOREIGN KEY (CreditId) REFERENCES Credits(CreditId) ON DELETE CASCADE,
     UNIQUE (CreditId, Type, Link)
@@ -58,8 +52,8 @@ CREATE TABLE IF NOT EXISTS CreditLinks (
 --     (last_insert_rowid(), 'Bluesky', 'https://bsky.app/profile/imdanuki.bsky.social');
 
 CREATE TABLE IF NOT EXISTS PostCredits (
-    PostId INTEGER NOT NULL,
-    CreditId INTEGER NOT NULL,
+    PostId TEXT NOT NULL,
+    CreditId TEXT NOT NULL,
     FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
     FOREIGN KEY (CreditId) REFERENCES Credits(CreditId) ON DELETE CASCADE,
     UNIQUE (PostId, CreditId)
@@ -70,13 +64,11 @@ CREATE TABLE IF NOT EXISTS PostCredits (
 --     (2, 1);
 
 CREATE TABLE IF NOT EXISTS PostImages (
-    ImageId INTEGER PRIMARY KEY AUTOINCREMENT, 
-    PostId INTEGER NOT NULL,
-    ImageName TEXT NOT NULL,
+    ImageName TEXT PRIMARY KEY, 
+    PostId TEXT NOT NULL,
     AltText Text NOT NULL,
     IsCover BOOLEAN NOT NULL CHECK (IsCover IN (0, 1)),
-    FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
-    UNIQUE (ImageName)
+    FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE
 );
 
 -- INSERT INTO PostImages (PostId, ImageName, AltText, IsCover) VALUES
@@ -97,7 +89,7 @@ CREATE TABLE IF NOT EXISTS Characters (
 --     ('Mercurial', '#ba0203', 0);
 
 CREATE TABLE IF NOT EXISTS PostCharacters (
-    PostId INTEGER NOT NULL,
+    PostId TEXT NOT NULL,
     CharacterId TEXT NOT NULL,
     FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
     FOREIGN KEY (CharacterId) REFERENCES Characters(CharacterId) ON DELETE CASCADE,

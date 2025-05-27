@@ -1,7 +1,11 @@
 type PostsPOST = {
     file: File;
-    name: string;
-    description: string;
+    postId: string;
+    title: string;
+    date: number;
+    description?: string;
+    tags: string;
+    type: "Commission" | "Art" | "Fursuit";
     isNSFW: boolean;
 };
 

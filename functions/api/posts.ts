@@ -30,29 +30,31 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
             } catch {
                 return invalidInputResponse();
             }
-
             const fileExtension = validatedFormData.file.name.split(".").pop();
             const imageName = crypto.randomUUID() + "." + fileExtension;
 
-            const [{ results }] = await Promise.all([
+            await Promise.all([
                 env.DB.prepare(
-                    "INSERT INTO Posts (Date, Title, Description, IsNSFW) VALUES (strftime('%s', 'now'), ?, ?, ?) RETURNING PostId"
+                    `INSERT INTO Posts (PostId, Title, Date, Description, Tags, Type, IsNSFW) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING PostId`
                 )
                     .bind(
-                        validatedFormData.name,
-                        validatedFormData.description,
+                        validatedFormData.postId,
+                        validatedFormData.title,
+                        validatedFormData.date ?? Math.floor(Date.now() / 1000),
+                        validatedFormData.description ?? null,
+                        validatedFormData.tags ?? null,
+                        validatedFormData.type,
                         validatedFormData.isNSFW ? 1 : 0
                     )
-                    .all(),
+                    .all()
+                    .catch((e) => console.error(e)),
                 env.IMAGES.put(imageName, validatedFormData.file),
             ]);
-
-            const postId = results[0].PostId;
 
             await env.DB.prepare(
                 "INSERT INTO PostImages (PostId, ImageName, AltText, IsCover) VALUES (?, ?, ?, ?)"
             )
-                .bind(postId, imageName, "Test Alt Text", 1)
+                .bind(validatedFormData.postId, imageName, "Test Alt Text", 1)
                 .all();
 
             return jsonResponse({});

@@ -19,7 +19,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
             const [{ results }] = await Promise.all([
                 env.DB.prepare(
-                    "INSERT INTO Credits (Name) VALUES (s?) RETURNING CreditId"
+                    "INSERT INTO Credits (Name) VALUES (?) RETURNING CreditId"
                 )
                     .bind(name)
                     .all(),

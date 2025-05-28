@@ -1,28 +1,113 @@
 import React from "react";
 import PageWrapper from "components/PageWrapper";
-import { Posts, Characters } from "./EndpointForms";
+import { Posts, Characters, Credits } from "./EndpointForms";
 import "./index.css";
 import fetch from "utils/fetch";
 import { PasswordInput, Select, TextInput } from "./BaseComponents";
 
-type Endpoints = "Posts" | "Characters";
+const Endpoints = ["Posts", "Characters", "Credits"] as const;
+
+type EndpointsType = (typeof Endpoints)[number];
 
 const EndpointContent: {
-    [key in Endpoints]: React.FC;
+    [key in EndpointsType]: React.FC;
 } = {
     Posts,
     Characters,
+    Credits,
 };
 
-const ELEMENT_PARSER = {
-    FILE: "FILE",
-    STRING: "STRING",
-    DATE_STRING: "DATE_STRING",
-    BOOLEAN: "BOOLEAN",
-    SELECT: "SELECT",
+const ELEMENT_PARSERS = {
+    FILE: (
+        elements: FormElementsType,
+        key: string,
+        body: { [key: string]: unknown }
+    ) => {
+        const formElement = elements[key];
+        if (!formElement || !(formElement instanceof HTMLInputElement)) {
+            return body;
+        }
+        if (!formElement.files?.length) {
+            return body;
+        }
+        body[key] = formElement?.files?.[0];
+        return body;
+    },
+    STRING: (
+        elements: FormElementsType,
+        key: string,
+        body: { [key: string]: unknown }
+    ) => {
+        const formElement = elements[key];
+        if (!formElement?.value) {
+            return body;
+        }
+        body[key] = formElement.value;
+        return body;
+    },
+    DATE_STRING: (
+        elements: FormElementsType,
+        key: string,
+        body: { [key: string]: unknown }
+    ) => {
+        const formElement = elements[key];
+        if (!formElement?.value || !(formElement instanceof HTMLInputElement)) {
+            return body;
+        }
+        body[key] = Math.floor(Date.parse(formElement.value) / 1000);
+        return body;
+    },
+    BOOLEAN: (
+        elements: FormElementsType,
+        key: string,
+        body: { [key: string]: unknown }
+    ) => {
+        const formElement = elements[key];
+        if (!formElement || !(formElement instanceof HTMLInputElement)) {
+            return body;
+        }
+        body[key] = formElement.checked ?? false;
+        return body;
+    },
+    SELECT: (
+        elements: FormElementsType,
+        key: string,
+        body: { [key: string]: unknown }
+    ) => {
+        const formElement = elements[key];
+        if (!formElement?.value) {
+            return body;
+        }
+        body[key] = formElement.value;
+        return body;
+    },
+    MAP: (
+        elements: FormElementsType,
+        key: string,
+        body: { [key: string]: unknown }
+    ) => {
+        let obj: { [key: string]: unknown } = {};
+        for (let i = 0; i < 999; i++) {
+            const keyElement = elements[`${key}-key-${i}`];
+            const valueElement = elements[`${key}-value-${i}`];
+            if (!keyElement?.value || !valueElement?.value) {
+                break;
+            }
+            obj[keyElement.value] = valueElement.value;
+        }
+        if (Object.keys(obj).length > 0) {
+            body[key] = obj;
+        }
+        return body;
+    },
 };
 
-type ElementParserType = (typeof ELEMENT_PARSER)[keyof typeof ELEMENT_PARSER];
+type ElementParserType = (
+    elements: FormElementsType,
+    key: string,
+    body: { [key: string]: unknown }
+) => { [key: string]: unknown };
+
 type HTMLElementType =
     | HTMLInputElement
     | HTMLTextAreaElement
@@ -30,43 +115,11 @@ type HTMLElementType =
     | undefined;
 
 const _parseFormElement = (
-    element: HTMLElementType,
+    elements: FormElementsType,
     key: string,
-    form: FormData,
-    parser: ElementParserType = ELEMENT_PARSER.STRING
+    body: { [key: string]: unknown }
 ) => {
-    if (!element) {
-        return;
-    }
-    switch (parser) {
-        case ELEMENT_PARSER.FILE:
-            if (!(element instanceof HTMLInputElement)) {
-                return;
-            }
-            element.files &&
-                element?.files.length &&
-                form.set(key, element?.files?.[0]);
-            break;
-        case ELEMENT_PARSER.BOOLEAN:
-            if (!(element instanceof HTMLInputElement)) {
-                return;
-            }
-            form.set(key, (element.checked ?? false).toString());
-            break;
-        case ELEMENT_PARSER.DATE_STRING:
-            if (!(element instanceof HTMLInputElement)) {
-                return;
-            }
-            element.value &&
-                form.set(
-                    key,
-                    Math.floor(Date.parse(element.value) / 1000).toString()
-                );
-            break;
-        default:
-            element.value && form.set(key, element.value);
-            break;
-    }
+    return FORM_ELEMENTS[key](elements, key, body);
 };
 
 type FormElementsType = HTMLFormControlsCollection & {
@@ -76,21 +129,24 @@ type FormElementsType = HTMLFormControlsCollection & {
 const FORM_ELEMENTS: {
     [key: string]: ElementParserType;
 } = {
-    file: ELEMENT_PARSER.FILE,
-    postId: ELEMENT_PARSER.STRING,
-    title: ELEMENT_PARSER.STRING,
-    date: ELEMENT_PARSER.DATE_STRING,
-    description: ELEMENT_PARSER.STRING,
-    tags: ELEMENT_PARSER.STRING,
-    type: ELEMENT_PARSER.SELECT,
-    isNSFW: ELEMENT_PARSER.BOOLEAN,
-    characterId: ELEMENT_PARSER.STRING,
-    color: ELEMENT_PARSER.STRING,
-    isGuest: ELEMENT_PARSER.BOOLEAN,
+    file: ELEMENT_PARSERS.FILE,
+    postId: ELEMENT_PARSERS.STRING,
+    title: ELEMENT_PARSERS.STRING,
+    date: ELEMENT_PARSERS.DATE_STRING,
+    description: ELEMENT_PARSERS.STRING,
+    tags: ELEMENT_PARSERS.STRING,
+    type: ELEMENT_PARSERS.SELECT,
+    isNSFW: ELEMENT_PARSERS.BOOLEAN,
+    characterId: ELEMENT_PARSERS.STRING,
+    color: ELEMENT_PARSERS.STRING,
+    isGuest: ELEMENT_PARSERS.BOOLEAN,
+    creditId: ELEMENT_PARSERS.STRING,
+    name: ELEMENT_PARSERS.STRING,
+    credits: ELEMENT_PARSERS.MAP,
 };
 
 const ContentManager: React.FC = () => {
-    const [endpoint, setEndpoint] = React.useState<Endpoints>("Posts");
+    const [endpoint, setEndpoint] = React.useState<EndpointsType>("Posts");
     const onSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback(
         async (event) => {
             event.preventDefault();
@@ -99,21 +155,37 @@ const ContentManager: React.FC = () => {
                 `${elements.username?.value}:${elements.password?.value}`
             );
 
-            const body = new FormData();
+            let bodyObj = {};
+            let form = null;
 
             try {
-                for (const [name, parser] of Object.entries(FORM_ELEMENTS)) {
-                    _parseFormElement(elements[name], name, body, parser);
+                for (const name of Object.keys(FORM_ELEMENTS)) {
+                    bodyObj = _parseFormElement(elements, name, bodyObj);
                 }
-                // UNCOMMENT BELOW LINE TO SEE FORM W/O POSTING
-                // console.log(Array.from(body.entries()));
+
+                if (endpoint === "Posts" || endpoint === "Characters") {
+                    form = new FormData();
+                    for (const [key, value] of Object.entries(bodyObj)) {
+                        if (value instanceof File) {
+                            form.set(key, value);
+                        } else {
+                            if (value === undefined || value === null) {
+                                continue;
+                            }
+                            form.set(key, value?.toString?.() ?? value);
+                        }
+                    }
+                }
+
+                // UNCOMMENT BELOW LINE TO SEE BODY W/O POSTING
+                // console.log(form ?? JSON.stringify(bodyObj));
 
                 await fetch(`/${endpoint.toLowerCase()}`, {
                     method: "POST",
                     headers: {
                         Authorization: `Basic ${authString}`,
                     },
-                    body,
+                    body: form ?? JSON.stringify(bodyObj),
                 });
             } catch (e) {
                 console.error(e);
@@ -124,7 +196,7 @@ const ContentManager: React.FC = () => {
 
     const onChange: React.ChangeEventHandler<HTMLSelectElement> =
         React.useCallback((e) => {
-            setEndpoint(e.target.value as Endpoints);
+            setEndpoint(e.target.value as EndpointsType);
         }, []);
 
     const Content = EndpointContent[endpoint];
@@ -144,7 +216,7 @@ const ContentManager: React.FC = () => {
                     <Select
                         name="endpoint"
                         onChange={onChange}
-                        options={["Posts", "Characters"]}
+                        options={Endpoints}
                         required
                     />
                     <br />

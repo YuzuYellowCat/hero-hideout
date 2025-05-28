@@ -86,7 +86,7 @@ export const TextArea: React.FC<BaseComponentProps> = ({
 };
 
 type SelectProps = BaseComponentProps & {
-    options: string[];
+    options: string[] | readonly string[];
     onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 };
 
@@ -111,6 +111,68 @@ export const Select: React.FC<SelectProps> = ({
                     </option>
                 ))}
             </select>
+        </LabelWrapper>
+    );
+};
+
+type ComponentArray = [React.ReactElement, React.ReactElement];
+
+type MapInputProps = BaseComponentProps & {
+    componentCreator: (key: string, value: string) => ComponentArray;
+};
+
+export const MapInput: React.FC<MapInputProps> = ({
+    label,
+    name,
+    componentCreator,
+}) => {
+    const [componentArrays, setComponentArrays] = React.useState<
+        ComponentArray[]
+    >([]);
+
+    const removeComponentArray = React.useCallback(
+        (componentArray: ComponentArray) => {
+            setComponentArrays((previousComponentArrays) =>
+                previousComponentArrays.filter(
+                    (array) => array !== componentArray
+                )
+            );
+        },
+        []
+    );
+    return (
+        <LabelWrapper name={name} label={label}>
+            <br />
+            {componentArrays.map((componentArray) => (
+                <>
+                    {componentArray[0]}
+                    {componentArray[1]}
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            removeComponentArray(componentArray);
+                        }}
+                    >
+                        Remove
+                    </button>
+                    <br />
+                </>
+            ))}
+            <button
+                onClick={(e) => {
+                    e.preventDefault();
+                    setComponentArrays((previousComponentArrays) =>
+                        previousComponentArrays.concat([
+                            componentCreator(
+                                `${name}-key-${componentArrays.length}`,
+                                `${name}-value-${componentArrays.length}`
+                            ),
+                        ])
+                    );
+                }}
+            >
+                Add
+            </button>
         </LabelWrapper>
     );
 };

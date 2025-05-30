@@ -39,6 +39,14 @@ const FormTypes: {
         mapper: (input: string) => input,
         optional,
     }),
+    ARRAY: (optional: boolean = false) => ({
+        validator: (input: string) => {
+            const parsedInput = JSON.parse(input);
+            return parsedInput instanceof Array && parsedInput.length > 0;
+        },
+        mapper: (input: string) => JSON.parse(input) as Array<unknown>,
+        optional,
+    }),
 };
 
 export const Forms: {
@@ -53,6 +61,9 @@ export const Forms: {
         tags: FormTypes.STRING(true),
         type: FormTypes.ENUM(["Commission", "Art", "Fursuit"]),
         isNSFW: FormTypes.BOOLEAN(),
+        characterIds: FormTypes.ARRAY(true),
+        creditIds: FormTypes.ARRAY(true),
+        altText: FormTypes.STRING(),
     },
     CHARACTER: {
         characterId: FormTypes.STRING(),

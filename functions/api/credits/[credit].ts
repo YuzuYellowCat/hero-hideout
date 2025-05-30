@@ -1,4 +1,4 @@
-import { jsonResponse } from "../../utils/responses";
+import { genericErrorResponse, jsonResponse } from "../../utils/responses";
 
 export const onRequest: PagesFunction<Env> = async ({
     request,
@@ -10,21 +10,29 @@ export const onRequest: PagesFunction<Env> = async ({
             return jsonResponse({});
         }
 
-        const { results } = await env.DB.prepare(
-            "SELECT * FROM Credits INNER JOIN CreditLinks ON Credits.CreditId = CreditLinks.CreditId WHERE Credits.CreditId = ?"
-        )
-            .bind(params.credit)
-            .all();
+        try {
+            const { results } = await env.DB.prepare(
+                "SELECT * FROM Credits INNER JOIN CreditLinks ON Credits.CreditId = CreditLinks.CreditId WHERE Credits.CreditId = ?"
+            )
+                .bind(params.credit)
+                .all();
 
-        const returnValue: CreditsPOST = {
-            name: results.at(0).name as string,
-            links: results.map((result) => ({
-                type: result.Type,
-                url: result.Link,
-            })) as CreditLink[],
-        };
+            const links = {};
+            results.forEach((result) => {
+                links[result.Type as string] = result.Url;
+            });
 
-        return jsonResponse(returnValue);
+            const returnValue: CreditsPOST = {
+                creditId: results.at(0).CreditId as string,
+                name: results.at(0).Name as string,
+                links,
+            };
+
+            return jsonResponse(returnValue);
+        } catch (e) {
+            console.error(e);
+            return genericErrorResponse();
+        }
     }
     return jsonResponse({});
 };

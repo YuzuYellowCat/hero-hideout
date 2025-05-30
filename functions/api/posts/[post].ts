@@ -1,4 +1,4 @@
-import { jsonResponse } from "../../utils/responses";
+import { genericErrorResponse, jsonResponse } from "../../utils/responses";
 
 export const onRequest: PagesFunction<Env> = async ({
     request,
@@ -10,12 +10,33 @@ export const onRequest: PagesFunction<Env> = async ({
             return jsonResponse({});
         }
 
-        const { results } = await env.DB.prepare(
-            "SELECT * FROM Posts INNER JOIN PostImages ON Posts.PostId = PostImages.PostId WHERE Posts.PostId = ?"
-        )
-            .bind(params.post)
-            .all();
-        return jsonResponse(results);
+        try {
+            const [
+                { results: postResults },
+                { results: creditResults },
+                { results: characterResults },
+            ] = await Promise.all([
+                await env.DB.prepare(
+                    "SELECT * FROM Posts INNER JOIN PostImages ON Posts.PostId = PostImages.PostId WHERE Posts.PostId = ?"
+                )
+                    .bind(params.post)
+                    .all(),
+                await env.DB.prepare(
+                    "SELECT * FROM PostCredits INNER JOIN Credits ON PostCredits.CreditId = Credits.CreditId WHERE PostCredits.PostId = ?"
+                )
+                    .bind(params.post)
+                    .all(),
+                await env.DB.prepare(
+                    "SELECT * FROM PostCharacters INNER JOIN Characters ON PostCharacters.CharacterId = Characters.CharacterId WHERE PostCharacters.PostId = ?"
+                )
+                    .bind(params.post)
+                    .all(),
+            ]);
+            console.log(postResults, creditResults, characterResults);
+            return jsonResponse({});
+        } catch (e) {
+            return genericErrorResponse();
+        }
     }
     return jsonResponse({});
 };

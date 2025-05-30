@@ -1,7 +1,9 @@
+import { insertDbList } from "../utils/db";
 import {
     jsonResponse,
     invalidInputResponse,
     optionsResponse,
+    genericErrorResponse,
 } from "../utils/responses";
 import { formDataValidator, Forms } from "../utils/validate";
 import { authWrapper } from "../utils/wrappers";
@@ -33,30 +35,64 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
             const fileExtension = validatedFormData.file.name.split(".").pop();
             const imageName = crypto.randomUUID() + "." + fileExtension;
 
-            await Promise.all([
-                env.DB.prepare(
-                    `INSERT INTO Posts (PostId, Title, Date, Description, Tags, Type, IsNSFW) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING PostId`
-                )
-                    .bind(
-                        validatedFormData.postId,
-                        validatedFormData.title,
-                        validatedFormData.date ?? Math.floor(Date.now() / 1000),
-                        validatedFormData.description ?? null,
-                        validatedFormData.tags ?? null,
-                        validatedFormData.type,
-                        validatedFormData.isNSFW ? 1 : 0
+            try {
+                await Promise.all([
+                    env.DB.prepare(
+                        `INSERT INTO Posts (PostId, Title, Date, Description, Tags, Type, IsNSFW) VALUES (?, ?, ?, ?, ?, ?, ?)`
                     )
-                    .all()
-                    .catch((e) => console.error(e)),
-                env.IMAGES.put(imageName, validatedFormData.file),
-            ]);
+                        .bind(
+                            validatedFormData.postId,
+                            validatedFormData.title,
+                            validatedFormData.date ??
+                                Math.floor(Date.now() / 1000),
+                            validatedFormData.description ?? null,
+                            validatedFormData.tags ?? null,
+                            validatedFormData.type,
+                            validatedFormData.isNSFW ? 1 : 0
+                        )
+                        .all(),
+                    env.IMAGES.put(imageName, validatedFormData.file),
+                ]);
 
-            await env.DB.prepare(
-                "INSERT INTO PostImages (PostId, ImageName, AltText, IsCover) VALUES (?, ?, ?, ?)"
-            )
-                .bind(validatedFormData.postId, imageName, "Test Alt Text", 1)
-                .all();
+                const creditsPost = insertDbList(
+                    "INSERT INTO PostCredits (PostId, CreditId) VALUES",
+                    validatedFormData.creditIds ?? [],
+                    (creditId: string) => [validatedFormData.postId, creditId]
+                );
 
+                const charactersPost = insertDbList(
+                    "INSERT INTO PostCharacters (PostId, CharacterId) VALUES",
+                    validatedFormData.characterIds ?? [],
+                    (characterId: string) => [
+                        validatedFormData.postId,
+                        characterId,
+                    ]
+                );
+
+                console.log(charactersPost);
+
+                await Promise.all([
+                    env.DB.prepare(
+                        "INSERT INTO PostImages (PostId, ImageName, AltText, IsCover) VALUES (?, ?, ?, ?)"
+                    )
+                        .bind(
+                            validatedFormData.postId,
+                            imageName,
+                            validatedFormData.altText,
+                            1
+                        )
+                        .all(),
+                    env.DB.prepare(creditsPost.sql)
+                        .bind(...creditsPost.params)
+                        .all(),
+                    env.DB.prepare(charactersPost.sql)
+                        .bind(...charactersPost.params)
+                        .all(),
+                ]);
+            } catch (e) {
+                console.error(e);
+                return genericErrorResponse();
+            }
             return jsonResponse({});
         });
     }

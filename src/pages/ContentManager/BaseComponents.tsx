@@ -177,6 +177,62 @@ export const MapInput: React.FC<MapInputProps> = ({
     );
 };
 
+type ArrayInputProps = BaseComponentProps & {
+    componentCreator: (name: string) => React.ReactElement;
+};
+
+export const ArrayInput: React.FC<ArrayInputProps> = ({
+    label,
+    name,
+    componentCreator,
+}) => {
+    const [components, setComponents] = React.useState<React.ReactElement[]>(
+        []
+    );
+
+    const removeComponent = React.useCallback(
+        (removingComponent: React.ReactElement) => {
+            setComponents((previousComponents) =>
+                previousComponents.filter(
+                    (component) => component !== removingComponent
+                )
+            );
+        },
+        []
+    );
+    return (
+        <LabelWrapper name={name} label={label}>
+            <br />
+            {components.map((component) => (
+                <>
+                    {component}
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            removeComponent(component);
+                        }}
+                    >
+                        Remove
+                    </button>
+                    <br />
+                </>
+            ))}
+            <button
+                onClick={(e) => {
+                    e.preventDefault();
+                    setComponents((previousComponents) =>
+                        previousComponents.concat([
+                            componentCreator(`${name}-${components.length}`),
+                        ])
+                    );
+                }}
+            >
+                Add
+            </button>
+        </LabelWrapper>
+    );
+};
+
 type FormContentsWrapperProps = {
     components: React.ReactElement[];
 };

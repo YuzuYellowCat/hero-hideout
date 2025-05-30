@@ -6,6 +6,7 @@ import {
     TextArea,
     Select,
     MapInput,
+    ArrayInput,
 } from "./BaseComponents";
 
 export const Posts: React.FC = () => (
@@ -13,6 +14,7 @@ export const Posts: React.FC = () => (
         components={[
             <TextInput key="postId" name="postId" required />,
             <FileInput key="file" name="file" label="Upload Image" required />,
+            <TextArea key="altText" name="altText" required />,
             <TextInput key="title" name="title" required />,
             <TextInput key="date" name="date" />,
             <TextArea key="description" name="description" />,
@@ -22,6 +24,18 @@ export const Posts: React.FC = () => (
                 label="Post Type"
                 options={["Commission", "Art", "Fursuit"]}
                 required
+            />,
+            <ArrayInput
+                name="characterIds"
+                componentCreator={(name) => (
+                    <TextInput name={name} key={name} required />
+                )}
+            />,
+            <ArrayInput
+                name="creditIds"
+                componentCreator={(name) => (
+                    <TextInput name={name} key={name} required />
+                )}
             />,
             <CheckBoxInput key="isNSFW" name="isNSFW" />,
         ]}
@@ -51,11 +65,16 @@ export const Credits: React.FC = () => (
             <TextInput key="creditId" name="creditId" required />,
             <TextInput key="name" name="name" required />,
             <MapInput
-                key="credits"
-                name="credits"
+                key="links"
+                name="links"
                 componentCreator={(key, value) => [
-                    <TextInput key={key} name={key} label="CreditType" />,
-                    <TextInput key={value} name={value} label="URL" />,
+                    <TextInput
+                        key={key}
+                        name={key}
+                        label="LinkType"
+                        required
+                    />,
+                    <TextInput key={value} name={value} label="URL" required />,
                 ]}
             />,
         ]}

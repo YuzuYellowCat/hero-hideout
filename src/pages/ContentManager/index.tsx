@@ -100,6 +100,24 @@ const ELEMENT_PARSERS = {
         }
         return body;
     },
+    ARRAY: (
+        elements: FormElementsType,
+        key: string,
+        body: { [key: string]: unknown }
+    ) => {
+        const arr: string[] = [];
+        for (let i = 0; i < 999; i++) {
+            const arrElement = elements[`${key}-${i}`];
+            if (!arrElement?.value) {
+                break;
+            }
+            arr.push(arrElement.value);
+        }
+        if (arr.length > 0) {
+            body[key] = arr;
+        }
+        return body;
+    },
 };
 
 type ElementParserType = (
@@ -142,7 +160,10 @@ const FORM_ELEMENTS: {
     isGuest: ELEMENT_PARSERS.BOOLEAN,
     creditId: ELEMENT_PARSERS.STRING,
     name: ELEMENT_PARSERS.STRING,
-    credits: ELEMENT_PARSERS.MAP,
+    links: ELEMENT_PARSERS.MAP,
+    characterIds: ELEMENT_PARSERS.ARRAY,
+    creditIds: ELEMENT_PARSERS.ARRAY,
+    altText: ELEMENT_PARSERS.STRING,
 };
 
 const ContentManager: React.FC = () => {
@@ -168,6 +189,8 @@ const ContentManager: React.FC = () => {
                     for (const [key, value] of Object.entries(bodyObj)) {
                         if (value instanceof File) {
                             form.set(key, value);
+                        } else if (value instanceof Array) {
+                            form.set(key, JSON.stringify(value));
                         } else {
                             if (value === undefined || value === null) {
                                 continue;
@@ -178,7 +201,10 @@ const ContentManager: React.FC = () => {
                 }
 
                 // UNCOMMENT BELOW LINE TO SEE BODY W/O POSTING
-                // console.log(form ?? JSON.stringify(bodyObj));
+                // console.log(
+                //     bodyObj,
+                //     form && Object.fromEntries(form.entries())
+                // );
 
                 await fetch(`/${endpoint.toLowerCase()}`, {
                     method: "POST",

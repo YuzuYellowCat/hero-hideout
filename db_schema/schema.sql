@@ -1,15 +1,14 @@
--- PRAGMA foreign_keys = OFF;
+PRAGMA foreign_keys = OFF;
 
--- DROP TABLE IF EXISTS Galleries;
--- DROP TABLE IF EXISTS Posts;
--- DROP TABLE IF EXISTS Credits;
--- DROP TABLE IF EXISTS CreditLinks;
--- DROP TABLE IF EXISTS PostCredits;
--- DROP TABLE IF EXISTS PostImages;
+DROP TABLE IF EXISTS Credits;
+DROP TABLE IF EXISTS CreditLinks;
+DROP TABLE IF EXISTS PostCredits;
+DROP TABLE IF EXISTS PostImages;
 -- DROP TABLE IF EXISTS Characters;
--- DROP TABLE IF EXISTS PostCharacters;
+DROP TABLE IF EXISTS PostCharacters;
+DROP TABLE IF EXISTS Posts;
 
--- PRAGMA foreign_keys = ON;
+PRAGMA foreign_keys = ON;
 
 -- INSERT INTO Galleries (Name) VALUES
 --     ('Fursuit'),
@@ -33,8 +32,8 @@ CREATE TABLE IF NOT EXISTS Posts (
 
 CREATE TABLE IF NOT EXISTS Credits (
     CreditId TEXT PRIMARY KEY, 
-    CreditName TEXT NOT NULL,
-    UNIQUE (CreditId, CreditName)
+    Name TEXT NOT NULL,
+    UNIQUE (CreditId, Name)
 );
 
 -- INSERT INTO Credits (CreditName) VALUES
@@ -43,9 +42,9 @@ CREATE TABLE IF NOT EXISTS Credits (
 CREATE TABLE IF NOT EXISTS CreditLinks (
     CreditId TEXT NOT NULL,
     Type TEXT NOT NULL, -- Bluesky, Etc?
-    Link TEXT NOT NULL,
+    Url TEXT NOT NULL,
     FOREIGN KEY (CreditId) REFERENCES Credits(CreditId) ON DELETE CASCADE,
-    UNIQUE (CreditId, Type, Link)
+    UNIQUE (CreditId, Type, Url)
 );
 
 -- INSERT INTO CreditLinks (CreditId, Type, Link) VALUES

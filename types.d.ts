@@ -2,16 +2,22 @@ type PostsPOST = {
     file: File;
     postId: string;
     title: string;
-    date: number;
+    date?: number;
     description?: string;
-    tags: string;
+    tags?: string;
     type: "Commission" | "Art" | "Fursuit";
     isNSFW: boolean;
+    characterIds?: string[];
+    creditIds?: string[];
+    altText: string;
 };
 
 type CreditsPOST = {
+    creditId: string;
     name: string;
-    links: CreditLink[];
+    links: {
+        [key: string]: string;
+    };
 };
 
 type CreditLink = {

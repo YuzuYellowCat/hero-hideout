@@ -22,7 +22,7 @@ export const onRequest: PagesFunction<Env> = async ({
                 links[result.Type as string] = result.Url;
             });
 
-            const returnValue: CreditsPOST = {
+            const returnValue: Credit = {
                 creditId: results.at(0).CreditId as string,
                 name: results.at(0).Name as string,
                 links,

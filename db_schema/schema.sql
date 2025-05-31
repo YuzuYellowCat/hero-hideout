@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS CreditLinks (
 CREATE TABLE IF NOT EXISTS PostCredits (
     PostId TEXT NOT NULL,
     CreditId TEXT NOT NULL,
+    Contribution TEXT NOT NULL,
     FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
     FOREIGN KEY (CreditId) REFERENCES Credits(CreditId) ON DELETE CASCADE,
     UNIQUE (PostId, CreditId)

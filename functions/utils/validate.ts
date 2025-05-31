@@ -47,6 +47,15 @@ const FormTypes: {
         mapper: (input: string) => JSON.parse(input) as Array<unknown>,
         optional,
     }),
+    OBJECT: (optional: boolean = false) => ({
+        validator: (input: string) => {
+            const parsedInput = JSON.parse(input);
+            console.log(parsedInput, typeof parsedInput);
+            return typeof parsedInput === "object" && parsedInput !== null;
+        },
+        mapper: (input: string) => JSON.parse(input) as Object,
+        optional,
+    }),
 };
 
 export const Forms: {
@@ -62,7 +71,7 @@ export const Forms: {
         type: FormTypes.ENUM(["Commission", "Art", "Fursuit"]),
         isNSFW: FormTypes.BOOLEAN(),
         characterIds: FormTypes.ARRAY(true),
-        creditIds: FormTypes.ARRAY(true),
+        credits: FormTypes.OBJECT(true),
         altText: FormTypes.STRING(),
     },
     CHARACTER: {
@@ -82,6 +91,7 @@ export const formDataValidator = <T>(form: Form, formData: FormData) => {
             if (formType.optional) {
                 continue;
             }
+            console.log("rip", formEntry, formType.validator(formEntry));
             throw new Error("Invalid FormData");
         }
         output[key] = formType.mapper(formEntry);

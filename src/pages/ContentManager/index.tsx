@@ -162,7 +162,7 @@ const FORM_ELEMENTS: {
     name: ELEMENT_PARSERS.STRING,
     links: ELEMENT_PARSERS.MAP,
     characterIds: ELEMENT_PARSERS.ARRAY,
-    creditIds: ELEMENT_PARSERS.ARRAY,
+    credits: ELEMENT_PARSERS.MAP,
     altText: ELEMENT_PARSERS.STRING,
 };
 
@@ -189,7 +189,10 @@ const ContentManager: React.FC = () => {
                     for (const [key, value] of Object.entries(bodyObj)) {
                         if (value instanceof File) {
                             form.set(key, value);
-                        } else if (value instanceof Array) {
+                        } else if (
+                            typeof value === "object" ||
+                            value instanceof Array
+                        ) {
                             form.set(key, JSON.stringify(value));
                         } else {
                             if (value === undefined || value === null) {

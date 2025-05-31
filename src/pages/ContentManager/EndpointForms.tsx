@@ -31,11 +31,22 @@ export const Posts: React.FC = () => (
                     <TextInput name={name} key={name} required />
                 )}
             />,
-            <ArrayInput
-                name="creditIds"
-                componentCreator={(name) => (
-                    <TextInput name={name} key={name} required />
-                )}
+            <MapInput
+                name="credits"
+                componentCreator={(key, value) => [
+                    <TextInput
+                        name={key}
+                        key={key}
+                        label="CreditID"
+                        required
+                    />,
+                    <TextInput
+                        name={value}
+                        key={value}
+                        label="Contribution"
+                        required
+                    />,
+                ]}
             />,
             <CheckBoxInput key="isNSFW" name="isNSFW" />,
         ]}

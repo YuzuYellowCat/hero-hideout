@@ -44,8 +44,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
     if (request.method === "POST") {
         return authWrapper({ secret: env.AUTH, request }, async () => {
-            const { creditId, name, links } =
-                (await request.json()) as CreditsPOST;
+            const { creditId, name, links } = (await request.json()) as Credit;
 
             await env.DB.prepare(
                 "INSERT INTO Credits (CreditId, Name) VALUES (?, ?)"

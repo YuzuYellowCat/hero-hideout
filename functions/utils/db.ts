@@ -5,8 +5,10 @@ export const insertDbList = <T>(
 ) => {
     const paramsList = [];
     for (const item of items) {
-        baseSQL += " (?, ?),";
-        paramsList.push(...itemMapper(item));
+        const itemMapperResult = itemMapper(item);
+        const questionMarks = itemMapperResult.map(() => "?");
+        baseSQL += ` (${questionMarks.join(", ")}),`;
+        paramsList.push(...itemMapperResult);
     }
     baseSQL = baseSQL.replace(/.$/, ";");
     return {

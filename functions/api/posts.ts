@@ -55,10 +55,16 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
                 ]);
 
                 const creditsPost = insertDbList(
-                    "INSERT INTO PostCredits (PostId, CreditId) VALUES",
-                    validatedFormData.creditIds ?? [],
-                    (creditId: string) => [validatedFormData.postId, creditId]
+                    "INSERT INTO PostCredits (PostId, CreditId, Contribution) VALUES",
+                    Object.entries(validatedFormData.credits),
+                    ([creditId, contribution]) => [
+                        validatedFormData.postId,
+                        creditId,
+                        contribution,
+                    ]
                 );
+
+                console.log(creditsPost);
 
                 const charactersPost = insertDbList(
                     "INSERT INTO PostCharacters (PostId, CharacterId) VALUES",
@@ -68,8 +74,6 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
                         characterId,
                     ]
                 );
-
-                console.log(charactersPost);
 
                 await Promise.all([
                     env.DB.prepare(

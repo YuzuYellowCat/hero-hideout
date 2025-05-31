@@ -8,16 +8,22 @@ type PostsPOST = {
     type: "Commission" | "Art" | "Fursuit";
     isNSFW: boolean;
     characterIds?: string[];
-    creditIds?: string[];
+    credits?: { [creditId: string]: string };
     altText: string;
 };
 
-type CreditsPOST = {
+type Credit = {
     creditId: string;
     name: string;
-    links: {
+    links?: {
         [key: string]: string;
     };
+};
+
+type PostCredit = {
+    creditId: string;
+    name: string;
+    contribution: string;
 };
 
 type CreditLink = {
@@ -39,4 +45,11 @@ type Character = {
     image: string;
     color: string;
     isGuest: boolean;
+};
+
+type PostImage = {
+    image: string;
+    postId: string;
+    altText: string;
+    isCover: boolean;
 };

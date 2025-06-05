@@ -60,12 +60,12 @@ export const Characters: React.FC = () => (
                 key="file"
                 name="file"
                 label="Upload Avatar for Character"
-                required
             />,
             <TextInput key="characterId" name="characterId" required />,
             <TextInput key="name" name="name" required />,
             <TextInput key="color" name="color" required />,
             <CheckBoxInput key="isGuest" name="isGuest" />,
+            <TextInput key="creditId" name="creditId" />,
         ]}
     />
 );
@@ -75,6 +75,7 @@ export const Credits: React.FC = () => (
         components={[
             <TextInput key="creditId" name="creditId" required />,
             <TextInput key="name" name="name" required />,
+            <TextInput key="color" name="color" required />,
             <MapInput
                 key="links"
                 name="links"
@@ -88,6 +89,12 @@ export const Credits: React.FC = () => (
                     <TextInput key={value} name={value} label="URL" required />,
                 ]}
             />,
+            <CheckBoxInput
+                key="createCharacter"
+                name="createCharacter"
+                label="Create character from credit?"
+            />,
+            <TextInput key="characterName" name="characterName" />,
         ]}
     />
 );

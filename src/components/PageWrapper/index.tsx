@@ -6,7 +6,7 @@ import Section from "components/Section";
 
 type PageWrapperProps = {
     color: string;
-    title: string;
+    title?: string;
     alignItems?: "start" | "end" | "center" | "inherit";
 };
 
@@ -18,7 +18,7 @@ const PageWrapper: React.FC<PropsWithChildren<PageWrapperProps>> = ({
 }) => {
     return (
         <div className="page">
-            <Header selected={title} borderColor={color} />
+            <Header selected={title ?? ""} borderColor={color} />
             <Section color={color} title={title}>
                 <div
                     className="page-contents"

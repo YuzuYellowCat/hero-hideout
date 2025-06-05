@@ -12,6 +12,7 @@ import CharacterPage from "pages/CharacterPage";
 import CharacterRef from "pages/CharacterRef";
 import ContentManager from "pages/ContentManager";
 import Testing from "pages/Testing";
+import Credit from "pages/Credit";
 import { CharacterProvider } from "contexts/CharacterContext";
 
 const App: React.FC = () => {
@@ -51,10 +52,19 @@ const App: React.FC = () => {
                         }
                     />
                     <Route
+                        path="/characters/:character/ref"
+                        element={
+                            <CharacterProvider>
+                                <CharacterRef />
+                            </CharacterProvider>
+                        }
+                    />
+                    <Route
                         path="/content-manager"
                         element={<ContentManager />}
                     />
                     <Route path="/testing" element={<Testing />} />
+                    <Route path="/credits/:credit" element={<Credit />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>

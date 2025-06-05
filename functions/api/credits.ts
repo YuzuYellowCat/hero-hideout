@@ -1,3 +1,4 @@
+import { insertDbList } from "../utils/db";
 import {
     genericErrorResponse,
     jsonResponse,
@@ -22,6 +23,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
                     Name: string;
                     Type: string;
                     Url: string;
+                    Color: string;
                 }) => {
                     if (!body[result.CreditId]) {
                         body[result.CreditId] = {
@@ -30,13 +32,14 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
                             links: {
                                 [result.Type]: result.Url,
                             },
-                        };
+                            color: result.Color,
+                        } as Credit;
                     } else {
                         body[result.CreditId].links[result.Type] = result.Url;
                     }
                 }
             );
-            return jsonResponse(body);
+            return jsonResponse(Object.values(body));
         } catch (e) {
             return genericErrorResponse();
         }
@@ -44,27 +47,44 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
     if (request.method === "POST") {
         return authWrapper({ secret: env.AUTH, request }, async () => {
-            const { creditId, name, links } = (await request.json()) as Credit;
+            try {
+                const {
+                    creditId,
+                    name,
+                    color,
+                    links,
+                    createCharacter,
+                    characterName,
+                } = (await request.json()) as CreditPOST;
 
-            await env.DB.prepare(
-                "INSERT INTO Credits (CreditId, Name) VALUES (?, ?)"
-            )
-                .bind(creditId, name)
-                .all()
-                .catch((e) => console.error(e));
-
-            await Promise.all(
-                Object.entries(links).map(([type, url]) =>
-                    env.DB.prepare(
-                        "INSERT OR REPLACE INTO CreditLinks (CreditId, Type, Url) VALUES (?, ?, ?)"
-                    )
-                        .bind(creditId, type, url)
-                        .all()
-                        .catch((e) => console.error(e))
+                await env.DB.prepare(
+                    "INSERT OR REPLACE INTO Credits (CreditId, Name, Color) VALUES (?, ?, ?)"
                 )
-            );
+                    .bind(creditId, name, color)
+                    .all();
 
-            return jsonResponse({});
+                const linksPost = insertDbList(
+                    "INSERT OR REPLACE INTO CreditLinks (CreditId, Type, Url) VALUES",
+                    Object.entries(links),
+                    ([type, url]) => [creditId, type, url]
+                );
+
+                await env.DB.prepare(linksPost.sql)
+                    .bind(...linksPost.params)
+                    .all();
+
+                if (createCharacter) {
+                    await env.DB.prepare(
+                        "INSERT INTO Characters (CharacterId, Name, Color, CreditId, IsGuest) VALUES (?, ?, ?, ?, 1)"
+                    )
+                        .bind(creditId, characterName ?? name, color, creditId)
+                        .all();
+                }
+                return jsonResponse({});
+            } catch (e) {
+                console.error(e);
+                return genericErrorResponse();
+            }
         });
     }
 

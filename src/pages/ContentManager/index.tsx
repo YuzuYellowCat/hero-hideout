@@ -164,6 +164,8 @@ const FORM_ELEMENTS: {
     characterIds: ELEMENT_PARSERS.ARRAY,
     credits: ELEMENT_PARSERS.MAP,
     altText: ELEMENT_PARSERS.STRING,
+    createCharacter: ELEMENT_PARSERS.BOOLEAN,
+    characterName: ELEMENT_PARSERS.STRING,
 };
 
 const ContentManager: React.FC = () => {

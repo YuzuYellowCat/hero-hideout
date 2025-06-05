@@ -12,12 +12,19 @@ type PostsPOST = {
     altText: string;
 };
 
+type CreditPOST = Credit & {
+    createCharacter?: boolean;
+    characterName?: string;
+};
+
 type Credit = {
     creditId: string;
     name: string;
-    links?: {
+    color: string;
+    links: {
         [key: string]: string;
     };
+    characters?: Character[];
 };
 
 type PostCredit = {
@@ -37,12 +44,13 @@ type CharactersPOST = {
     file?: File;
     color: string;
     isGuest: boolean;
+    creditId?: string;
 };
 
 type Character = {
     characterId: string;
     name: string;
-    image: string;
+    image?: string;
     color: string;
     isGuest: boolean;
 };

@@ -80,6 +80,7 @@ export const Forms: {
         name: FormTypes.STRING(),
         color: FormTypes.STRING(),
         isGuest: FormTypes.BOOLEAN(),
+        creditId: FormTypes.STRING(true),
     },
 };
 

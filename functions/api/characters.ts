@@ -5,6 +5,7 @@ import {
 } from "../utils/responses";
 import { authWrapper } from "../utils/wrappers";
 import { formDataValidator, Forms } from "../utils/validate";
+import { convertBoolToDBBool } from "../utils/types";
 
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     if (request.method === "OPTIONS") {
@@ -12,8 +13,14 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     if (request.method === "GET") {
+        const { searchParams } = new URL(request.url);
+        const includeGuests = searchParams.has("all");
+
+        console.log(includeGuests);
         const { results } = await env.DB.prepare(
-            "SELECT * FROM Characters WHERE IsGuest = 0"
+            `SELECT * FROM Characters ${
+                includeGuests ? "" : "WHERE IsGuest = 0"
+            }`
         ).all();
         return jsonResponse(results);
     }
@@ -35,14 +42,15 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
             await Promise.all([
                 env.DB.prepare(
-                    "INSERT INTO Characters (CharacterId, Name, Color, ImageName, IsGuest) VALUES (?, ?, ?, ?, ?)"
+                    "INSERT INTO Characters (CharacterId, Name, Color, ImageName, IsGuest, CreditId) VALUES (?, ?, ?, ?, ?, ?)"
                 )
                     .bind(
                         validatedFormData.characterId,
                         validatedFormData.name,
                         validatedFormData.color,
                         validatedFormData.file ? imageName : null,
-                        validatedFormData.isGuest ? 1 : 0
+                        convertBoolToDBBool(validatedFormData.isGuest),
+                        validatedFormData.creditId ?? null
                     )
                     .all(),
                 validatedFormData.file

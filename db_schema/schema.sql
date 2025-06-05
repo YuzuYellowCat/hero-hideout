@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS Credits;
 DROP TABLE IF EXISTS CreditLinks;
 DROP TABLE IF EXISTS PostCredits;
 DROP TABLE IF EXISTS PostImages;
--- DROP TABLE IF EXISTS Characters;
+DROP TABLE IF EXISTS Characters;
 DROP TABLE IF EXISTS PostCharacters;
 DROP TABLE IF EXISTS Posts;
 
@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS Posts (
 CREATE TABLE IF NOT EXISTS Credits (
     CreditId TEXT PRIMARY KEY, 
     Name TEXT NOT NULL,
+    Color TEXT NOT NULL,
     UNIQUE (CreditId, Name)
 );
 
@@ -76,11 +77,13 @@ CREATE TABLE IF NOT EXISTS PostImages (
 --     (2, 'cool-img2.jpg', 'Mercurial doing stuff', 1);
 
 CREATE TABLE IF NOT EXISTS Characters (
-    CharacterId TEXT PRIMARY KEY, 
+    CharacterId TEXT PRIMARY KEY,
+    CreditId TEXT,
     Name TEXT NOT NULL,
     Color TEXT NOT NULL,
     ImageName TEXT,
     IsGuest BOOLEAN NOT NULL CHECK (IsGuest IN (0, 1)),
+    FOREIGN KEY (CreditId) REFERENCES Credits(CreditId) ON DELETE CASCADE
     UNIQUE (Name)
 );
 

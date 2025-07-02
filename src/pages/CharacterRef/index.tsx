@@ -18,17 +18,20 @@ const CharacterRef: React.FC = () => {
     const [RefComponent, setRefComponent] =
         React.useState<React.ComponentType<any>>();
 
+    const character = React.useMemo(
+        () => params.character && characters.get(params.character),
+        [params.character, characters]
+    );
+
     React.useEffect(() => {
-        if (!params.character) {
+        if (!character) {
             return;
         }
 
         try {
             setRefComponent(
                 React.lazy(() =>
-                    import(
-                        /* webpackIgnore: true */ `ref-contents/${params.character}`
-                    ).catch((err) => {
+                    import(`ref-contents/${character.name}`).catch((err) => {
                         console.error("Component Failed Loading:", err);
                         return { default: CharacterHasNoRef };
                     })
@@ -38,9 +41,7 @@ const CharacterRef: React.FC = () => {
             console.log("blegh");
         } finally {
         }
-    }, [params.character]);
-
-    const character = params.character && characters.get(params.character);
+    }, [character]);
 
     if (character === "") {
         // If this characters isn't found, or it doesn't have a ref, show 404

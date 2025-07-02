@@ -15,24 +15,28 @@ const CharacterPage: React.FC = () => {
     const navigate = useNavigate();
     const [hasRef, setHasRef] = useState<boolean | null>(null);
 
+    const character = React.useMemo(
+        () => params.character && characters.get(params.character),
+        [params.character, characters]
+    );
+
     useEffect(() => {
         if (hasRef !== null) {
             return;
         }
 
-        if (!params.character) {
+        if (!character) {
             return;
         }
 
         try {
-            require(`../../ref-contents/${params.character}`);
+            require(`../../ref-contents/${character.name}`);
             setHasRef(true);
         } catch {
             setHasRef(false);
         }
-    }, [params.character, hasRef]);
+    }, [character, hasRef]);
 
-    const character = params.character && characters.get(params.character);
     if (!character || character.isGuest) {
         // If this character isn't found, show the 404 page
         return <NotFound />;

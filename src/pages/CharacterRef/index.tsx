@@ -58,7 +58,7 @@ const CharacterRef: React.FC = () => {
         >
             {RefComponent ? <RefComponent /> : <PageLoader />}
             <Button onClick={() => navigate(`./..`)}>
-                Back to Character Page!
+                Back to Character Page
             </Button>
         </PageWrapper>
     );

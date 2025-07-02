@@ -5,14 +5,14 @@ import "./index.css";
 import Section from "components/Section";
 
 type PageWrapperProps = {
-    color: string;
+    color?: string;
     title?: string;
     alignItems?: "start" | "end" | "center" | "inherit";
 };
 
 const PageWrapper: React.FC<PropsWithChildren<PageWrapperProps>> = ({
     children,
-    color,
+    color = "#ffffff",
     title,
     alignItems = "inherit",
 }) => {

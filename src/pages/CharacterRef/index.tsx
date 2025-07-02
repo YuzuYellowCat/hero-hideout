@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router";
 import NotFound from "pages/NotFound";
 import Button from "components/Button";
 import { CharacterContext } from "contexts/CharacterContext";
+import PageLoader from "components/PageLoader";
+import CharacterHasNoRef from "components/CharacterHasNoRef";
 
 type CharacterParams = {
     character: string;
@@ -13,34 +15,45 @@ const CharacterRef: React.FC = () => {
     const params = useParams<CharacterParams>();
     const navigate = useNavigate();
     const characters = React.useContext(CharacterContext);
-    const [refComponent, setRefComponent] =
-        React.useState<React.ReactElement>();
+    const [RefComponent, setRefComponent] =
+        React.useState<React.ComponentType<any>>();
 
     React.useEffect(() => {
         if (!params.character) {
             return;
         }
-        import(`../../ref-contents/${params.character}`)
-            .then((module) => {
-                const Component = module.default;
-                setRefComponent(<Component />);
-            })
-            .catch(() => {});
-    }, [params]);
+
+        try {
+            setRefComponent(
+                React.lazy(() =>
+                    import(`ref-contents/${params.character}`).catch((err) => {
+                        console.error("Component Failed Loading:", err);
+                        return { default: CharacterHasNoRef };
+                    })
+                )
+            );
+        } catch {
+            console.log("blegh");
+        } finally {
+        }
+    }, [params.character]);
 
     const character = params.character && characters.get(params.character);
-    if (!character || !refComponent) {
+
+    if (character === "") {
         // If this characters isn't found, or it doesn't have a ref, show 404
         return <NotFound />;
     }
 
+    console.log(RefComponent);
+
     return (
         <PageWrapper
-            color={character.color}
-            title={character.name}
+            color={character?.color ?? "#333333"}
+            title={character?.name}
             alignItems="center"
         >
-            {refComponent}
+            {RefComponent ? <RefComponent /> : <PageLoader />}
             <Button onClick={() => navigate(`./..`)}>
                 Back to Character Page
             </Button>

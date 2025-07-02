@@ -61,3 +61,5 @@ type PostImage = {
     altText: string;
     isCover: boolean;
 };
+
+type GalleryPost = {};

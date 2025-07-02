@@ -20,7 +20,7 @@ const CharacterRef: React.FC = () => {
         if (!params.character) {
             return;
         }
-        import(`ref-contents/${params.character}`)
+        import(`../../ref-contents/${params.character}`)
             .then((module) => {
                 const Component = module.default;
                 setRefComponent(<Component />);

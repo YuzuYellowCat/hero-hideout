@@ -5,13 +5,13 @@ import NotFound from "pages/NotFound";
 import fetch from "utils/fetch";
 import Link from "components/Link";
 import Button from "components/Button";
-import "./index.css";
+import CreditSection from "pages/CreditSection";
 
 type CreditParams = {
     credit: string;
 };
 
-const CharacterPage: React.FC = () => {
+const Credit: React.FC = () => {
     const params = useParams<CreditParams>();
     const [loading, setLoading] = useState(true);
     const [credit, setCredit] = useState<Credit | null>(null);
@@ -37,18 +37,15 @@ const CharacterPage: React.FC = () => {
             return;
         }
         return (
-            <>
-                <h3 className="section-title">Links:</h3>
-                <div className="credit-flex">
-                    {Object.entries(credit.links)
-                        .sort()
-                        .map(([type, url]) => (
-                            <Link href={url} key={type}>
-                                {type}
-                            </Link>
-                        ))}
-                </div>
-            </>
+            <CreditSection title="Links">
+                {Object.entries(credit.links)
+                    .sort()
+                    .map(([type, url]) => (
+                        <Link href={url} key={type}>
+                            {type}
+                        </Link>
+                    ))}
+            </CreditSection>
         );
     }, [credit?.links]);
 
@@ -57,20 +54,17 @@ const CharacterPage: React.FC = () => {
             return;
         }
         return (
-            <>
-                <h3 className="section-title">Appearances:</h3>
-                <div className="credit-flex">
-                    {credit.characters.map((character) => (
-                        <Button
-                            onClick={() => {}}
-                            color={character.color}
-                            key={character.characterId}
-                        >
-                            {character.name}
-                        </Button>
-                    ))}
-                </div>
-            </>
+            <CreditSection title="Appearances">
+                {credit.characters.map((character) => (
+                    <Button
+                        onClick={() => {}}
+                        color={character.color}
+                        key={character.characterId}
+                    >
+                        {character.name}
+                    </Button>
+                ))}
+            </CreditSection>
         );
     }, [credit?.characters]);
 
@@ -91,4 +85,4 @@ const CharacterPage: React.FC = () => {
     );
 };
 
-export default CharacterPage;
+export default Credit;

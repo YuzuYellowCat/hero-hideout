@@ -25,7 +25,7 @@ const CharacterPage: React.FC = () => {
         }
 
         try {
-            require(`ref-contents/${params.character}`);
+            require(`../../ref-contents/${params.character}`);
             setHasRef(true);
         } catch {
             setHasRef(false);

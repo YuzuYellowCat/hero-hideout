@@ -26,7 +26,9 @@ const CharacterRef: React.FC = () => {
         try {
             setRefComponent(
                 React.lazy(() =>
-                    import(`ref-contents/${params.character}`).catch((err) => {
+                    import(
+                        /* webpackIgnore: true */ `ref-contents/${params.character}`
+                    ).catch((err) => {
                         console.error("Component Failed Loading:", err);
                         return { default: CharacterHasNoRef };
                     })
@@ -55,7 +57,7 @@ const CharacterRef: React.FC = () => {
         >
             {RefComponent ? <RefComponent /> : <PageLoader />}
             <Button onClick={() => navigate(`./..`)}>
-                Back to Character Page
+                Back to Character Page!
             </Button>
         </PageWrapper>
     );

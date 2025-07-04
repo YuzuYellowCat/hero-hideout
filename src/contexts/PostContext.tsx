@@ -1,16 +1,14 @@
 import React from "react";
 import fetch from "utils/fetch";
 
-let _postCache: Map<String, Character> = new Map();
+let _postCache: Map<String, Post> = new Map();
 
-export const PostContext =
-    React.createContext<Map<String, Character>>(_postCache);
+export const PostContext = React.createContext<Map<String, Post>>(_postCache);
 
 export const PostProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const [posts, setPosts] =
-        React.useState<Map<String, Character>>(_postCache);
+    const [posts, setPosts] = React.useState<Map<String, Post>>(_postCache);
     React.useEffect(() => {
         if (_postCache.size > 0) {
             setPosts(_postCache);
@@ -21,15 +19,17 @@ export const PostProvider: React.FC<React.PropsWithChildren> = ({
         })
             .then((res) => res.json())
             .then((posts) => {
-                console.log(posts);
-                const postMap = new Map<String, Character>();
-                for (const character of posts) {
-                    postMap.set(character.CharacterId, {
-                        characterId: character.CharacterId,
-                        name: character.Name,
-                        color: character.Color,
-                        image: character.ImageName,
-                        isGuest: !!character.IsGuest,
+                const postMap = new Map<String, Post>();
+                for (const post of posts) {
+                    postMap.set(post.PostId, {
+                        postId: post.PostId,
+                        title: post.Title,
+                        description: post.Description,
+                        isNSFW: !!post.IsNSFW,
+                        type: post.Type,
+                        altText: post.AltText,
+                        imageName: post.ImageName,
+                        date: new Date(post.Date * 1000),
                     });
                 }
                 _postCache = postMap;

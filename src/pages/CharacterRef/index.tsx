@@ -28,27 +28,20 @@ const CharacterRef: React.FC = () => {
             return;
         }
 
-        try {
-            setRefComponent(
-                React.lazy(() =>
-                    import(`ref-contents/${character.name}`).catch((err) => {
-                        console.error("Component Failed Loading:", err);
-                        return { default: CharacterHasNoRef };
-                    })
-                )
-            );
-        } catch {
-            console.log("blegh");
-        } finally {
-        }
+        setRefComponent(
+            React.lazy(() =>
+                import(`ref-contents/${character.name}`).catch((err) => {
+                    console.error("Component Failed Loading:", err);
+                    return { default: CharacterHasNoRef };
+                })
+            )
+        );
     }, [character]);
 
     if (character === "") {
         // If this characters isn't found, or it doesn't have a ref, show 404
         return <NotFound />;
     }
-
-    console.log(RefComponent);
 
     return (
         <PageWrapper

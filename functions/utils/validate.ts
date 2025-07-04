@@ -50,7 +50,6 @@ const FormTypes: {
     OBJECT: (optional: boolean = false) => ({
         validator: (input: string) => {
             const parsedInput = JSON.parse(input);
-            console.log(parsedInput, typeof parsedInput);
             return typeof parsedInput === "object" && parsedInput !== null;
         },
         mapper: (input: string) => JSON.parse(input) as Object,

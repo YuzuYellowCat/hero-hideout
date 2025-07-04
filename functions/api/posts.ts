@@ -64,8 +64,6 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
                     ]
                 );
 
-                console.log(creditsPost);
-
                 const charactersPost = insertDbList(
                     "INSERT INTO PostCharacters (PostId, CharacterId) VALUES",
                     validatedFormData.characterIds ?? [],

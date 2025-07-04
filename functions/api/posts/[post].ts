@@ -42,8 +42,6 @@ export const onRequest: PagesFunction<Env> = async ({
                     .all(),
             ]);
 
-            console.log(postResult, creditResults, characterResults);
-
             return jsonResponse({
                 ...postResult,
                 IsNSFW: convertDBBoolToBool(postResult.IsNSFW),

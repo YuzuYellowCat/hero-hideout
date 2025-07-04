@@ -16,7 +16,6 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
         const { searchParams } = new URL(request.url);
         const includeGuests = searchParams.has("all");
 
-        console.log(includeGuests);
         const { results } = await env.DB.prepare(
             `SELECT * FROM Characters ${
                 includeGuests ? "" : "WHERE IsGuest = 0"

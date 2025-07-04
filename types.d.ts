@@ -1,15 +1,25 @@
-type PostsPOST = {
-    file: File;
+type PostType = "Commission" | "Art" | "Fursuit";
+
+type BasePost = {
     postId: string;
     title: string;
-    date?: number;
     description?: string;
     tags?: string;
-    type: "Commission" | "Art" | "Fursuit";
+    type: PostType;
     isNSFW: boolean;
     characterIds?: string[];
     credits?: { [creditId: string]: string };
     altText: string;
+};
+
+type Post = BasePost & {
+    imageName: string;
+    date: Date;
+};
+
+type PostsPOST = BasePost & {
+    file: File;
+    date?: number;
 };
 
 type CreditPOST = Credit & {

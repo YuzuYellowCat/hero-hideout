@@ -12,7 +12,6 @@ import ContentManager from "pages/ContentManager";
 import Testing from "pages/Testing";
 import Credit from "pages/Credit";
 import { CharacterProvider } from "contexts/CharacterContext";
-import { PostProvider } from "contexts/PostContext";
 import Gallery from "pages/Gallery";
 
 const App: React.FC = () => {
@@ -22,14 +21,7 @@ const App: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
-                    <Route
-                        path="/gallery"
-                        element={
-                            <PostProvider>
-                                <Gallery />
-                            </PostProvider>
-                        }
-                    />
+                    <Route path="/gallery" element={<Gallery />} />
                     <Route
                         path="/characters"
                         element={

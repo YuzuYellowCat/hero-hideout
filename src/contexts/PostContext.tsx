@@ -33,7 +33,7 @@ export const PostProvider: React.FC<React.PropsWithChildren> = ({
                     });
                 }
                 _postCache = postMap;
-                setPosts(posts);
+                setPosts(postMap);
             });
     }, []);
 

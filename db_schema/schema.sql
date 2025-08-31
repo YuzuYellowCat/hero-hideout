@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS PostCredits (
     PostId TEXT NOT NULL,
     CreditId TEXT NOT NULL,
     Contribution TEXT NOT NULL,
+    IsPrimary BOOLEAN,
     FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
     FOREIGN KEY (CreditId) REFERENCES Credits(CreditId) ON DELETE CASCADE,
     UNIQUE (PostId, CreditId)
@@ -67,7 +68,7 @@ CREATE TABLE IF NOT EXISTS PostCredits (
 CREATE TABLE IF NOT EXISTS PostImages (
     ImageName TEXT PRIMARY KEY, 
     PostId TEXT NOT NULL,
-    AltText Text NOT NULL,
+    AltText TEXT NOT NULL,
     IsCover BOOLEAN NOT NULL CHECK (IsCover IN (0, 1)),
     FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE
 );

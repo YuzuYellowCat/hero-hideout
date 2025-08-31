@@ -14,10 +14,17 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     if (request.method === "GET") {
-        const { results } = await env.DB.prepare(
-            "SELECT * FROM Posts INNER JOIN PostImages ON Posts.PostId = PostImages.PostId"
-        ).all();
-        return jsonResponse(results);
+        const [{ results: posts }, { results: primaryCredits }] =
+            await Promise.all([
+                env.DB.prepare(
+                    "SELECT * FROM Posts INNER JOIN PostImages ON Posts.PostId = PostImages.PostId"
+                ).all(),
+                env.DB.prepare(
+                    "SELECT * FROM PostCredits WHERE IsPrimary = 1"
+                ).all(),
+            ]);
+        console.log(posts, primaryCredits);
+        return jsonResponse(posts);
     }
 
     if (request.method === "POST") {
@@ -55,12 +62,13 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
                 ]);
 
                 const creditsPost = insertDbList(
-                    "INSERT INTO PostCredits (PostId, CreditId, Contribution) VALUES",
+                    "INSERT INTO PostCredits (PostId, CreditId, Contribution, IsPrimary) VALUES",
                     Object.entries(validatedFormData.credits),
-                    ([creditId, contribution]) => [
+                    ([creditId, contribution, isPrimary]) => [
                         validatedFormData.postId,
                         creditId,
                         contribution,
+                        isPrimary ?? 0,
                     ]
                 );
 

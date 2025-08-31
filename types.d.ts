@@ -15,6 +15,12 @@ type BasePost = {
 type Post = BasePost & {
     imageName: string;
     date: Date;
+    credits?: {
+        [creditId: string]: {
+            contribution: string;
+            isPrimary?: boolean;
+        };
+    };
 };
 
 type PostsPOST = BasePost & {

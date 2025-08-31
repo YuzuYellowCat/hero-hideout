@@ -16,6 +16,18 @@ const YuzuRefContents: React.FC = () => {
                     JungaBeast
                 </Link>
             </p>
+            <h4>Info</h4>
+            <ul>
+                <li>
+                    <b>Age</b>: 26
+                </li>
+                <li>
+                    <b>Pronouns</b>: he/him
+                </li>
+                <li>
+                    <b>Orientation</b>: Bisexual
+                </li>
+            </ul>
         </RefContentsWrapper>
     );
 };

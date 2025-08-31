@@ -15,6 +15,14 @@
     margin: 0;
 }
 
+.ref-contents h4 {
+    font-family: "Chakra Petch", sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: white;
+    margin: 0;
+}
+
 .ref-contents img {
     max-height: calc(100vh - 32px);
     object-fit: scale-down;
@@ -22,5 +30,5 @@
 }
 
 .ref-contents p {
-    margin: 0;
+    margin: 16px;
 }
